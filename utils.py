@@ -71,8 +71,8 @@ class get_data():
 			for line in tqdm(data):
 				wav_file, pny, han = line.split('\t')
 				self.wav_lst.append(wav_file)
-				self.pny_lst.append(pny.split(' '))
-				self.han_lst.append(han.strip('\n'))
+				self.pny_lst.append([i for i in pny.split(' ') if i != ''])
+				self.han_lst.append(''.join(han.strip('\n').split(' ')))
 		if self.data_length:
 			self.wav_lst = self.wav_lst[:self.data_length]
 			self.pny_lst = self.pny_lst[:self.data_length]
@@ -129,7 +129,6 @@ class get_data():
 		return [vocab.index(pny) for pny in line]
 
 	def han2id(self, line, vocab):
-		line = ''.join(line.split(' '))
 		return [vocab.index(han) for han in line]
 
 	def wav_padding(self, wav_data_lst):
@@ -170,7 +169,6 @@ class get_data():
 	def mk_lm_han_vocab(self, data):
 		vocab = ['<PAD>']
 		for line in tqdm(data):
-			line = ''.join(line.split(' '))
 			for han in line:
 				if han not in vocab:
 					vocab.append(han)
