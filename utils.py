@@ -14,7 +14,8 @@ def data_hparams():
     params = tf.contrib.training.HParams(
         # vocab
         data_type = 'train',
-        data_path = 'e:/data/',
+        #data_path = 'e:/data/',
+		data_path='G:/yinpin_data/',
         thchs30 = True,
         aishell = False,
 		prime = False,
