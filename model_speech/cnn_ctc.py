@@ -32,14 +32,16 @@ class Am():
             self.opt_init()
 
     def _model_init(self):
-        self.inputs = Input(name='the_inputs', shape=(None, 200, 1))
-        self.h1 = cnn_cell(32, self.inputs)
+        self.inputs = Input(name='the_inputs', shape=(None, 200, 1))#shape限定三维张量，第一维是batch_size
+                                                                    #Input用于实例化keras张量，产生象征性的张量，类似于占位符，name是它的名字
+
+        self.h1 = cnn_cell(32, self.inputs)  #第一个参数size，输出空间的维数，即卷积层中的滤波器数目
         self.h2 = cnn_cell(64, self.h1)
         self.h3 = cnn_cell(128, self.h2)
         self.h4 = cnn_cell(128, self.h3, pool=False)
         self.h5 = cnn_cell(128, self.h4, pool=False)
         # 200 / 8 * 128 = 3200
-        self.h6 = Reshape((-1, 3200))(self.h5)
+        self.h6 = Reshape((-1, 3200))(self.h5)#-1是占位符，这一维的长度根据其他维而定
         self.h6 = Dropout(0.2)(self.h6)
         self.h7 = dense(256)(self.h6)
         self.h7 = Dropout(0.2)(self.h7)
@@ -51,51 +53,61 @@ class Am():
         self.labels = Input(name='the_labels', shape=[None], dtype='float32')
         self.input_length = Input(name='input_length', shape=[1], dtype='int64')
         self.label_length = Input(name='label_length', shape=[1], dtype='int64')
-        self.loss_out = Lambda(ctc_lambda, output_shape=(1,), name='ctc')\
-            ([self.labels, self.outputs, self.input_length, self.label_length])
-        self.ctc_model = Model(inputs=[self.labels, self.inputs,
-            self.input_length, self.label_length], outputs=self.loss_out)
 
-    def opt_init(self):
-        opt = Adam(lr = self.lr, beta_1 = 0.9, beta_2 = 0.999, decay = 0.01, epsilon = 10e-8)
-        if self.gpu_nums > 1:
+        self.loss_out = Lambda(ctc_lambda, output_shape=(1,), name='ctc')\
+            ([self.labels, self.outputs, self.input_length, self.label_length])#Lambda将任意表达式包装为“层”对象
+                                                                               #shape(1,)表示该层输出维度为一维且维度大小为1
+        self.ctc_model = Model(inputs=[self.labels, self.inputs,
+            self.input_length, self.label_length], outputs=self.loss_out)#Model从输入（inputs）和输出（outputs）创建模型
+
+    def opt_init(self):#优化器初始化
+        opt = Adam(lr = self.lr, beta_1 = 0.9, beta_2 = 0.999, decay = 0.01, epsilon = 10e-8)#eplison模糊因子，decay每次更新时lr的下降
+
+        if self.gpu_nums > 1:#多GPU
             self.ctc_model=multi_gpu_model(self.ctc_model,gpus=self.gpu_nums)
-        self.ctc_model.compile(loss={'ctc': lambda y_true, output: output}, optimizer=opt)
+
+        self.ctc_model.compile(loss={'ctc': lambda y_true, output: output}, optimizer=opt)#单GPU
+                                                                                    #complie函数编译模型model以供训练，编译时指明loss和优化器
+                                                                                    #y_true为真实数据标签（对应于上面的y_pred输出的预测值）                                                                                  #
+
 
 
 
 
 
 # ============================模型组件=================================
+def ctc_lambda(args):
+    labels, y_pred, input_length, label_length = args   #labels包含标签的张量；y_pred包含softmax输出的张量
+                                                        #input_length是y_pred中每个批元素的序列长度
+    y_pred = y_pred[:, :, :]#截取y_pred前三维
+    return K.ctc_batch_cost(labels, y_pred, input_length, label_length)#在每个批上运行ctc损失算法
+
 def conv2d(size):
     return Conv2D(size, (3,3), use_bias=True, activation='relu',
         padding='same', kernel_initializer='he_normal')
 
 
 def norm(x):
-    return BatchNormalization(axis=-1)(x)
+    return BatchNormalization(axis=-1)(x)#设定标准化层并传入x
 
 
 def maxpool(x):
-    return MaxPooling2D(pool_size=(2,2), strides=None, padding="valid")(x)
+    return MaxPooling2D(pool_size=(2,2), strides=None, padding="valid")(x)#valid表示不padding，步长strides=None表示不重叠且紧贴
 
 
 def dense(units, activation="relu"):
     return Dense(units, activation=activation, use_bias=True,
-        kernel_initializer='he_normal')
+        kernel_initializer='he_normal')#全连接层units输出维度
 
 
 # x.shape=(none, none, none)
 # output.shape = (1/2, 1/2, 1/2)
-def cnn_cell(size, x, pool=True):
+def cnn_cell(size, x, pool=True):# #第一个参数size，输出空间的维数，即卷积层中的滤波器数目
     x = norm(conv2d(size)(x))
     x = norm(conv2d(size)(x))
     if pool:
-        x = maxpool(x)
+        x = maxpool(x)           #此卷积核的两个卷积层不减少维度，最大池化使各维度减半！
     return x
 
 
-def ctc_lambda(args):
-    labels, y_pred, input_length, label_length = args
-    y_pred = y_pred[:, :, :]
-    return K.ctc_batch_cost(labels, y_pred, input_length, label_length)
+

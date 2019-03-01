@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="70f3108b-c998-4d27-9f96-b3ab8f3395ee" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_language/transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/model_language/transformer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_speech/cnn_ctc.py" beforeDir="false" afterPath="$PROJECT_DIR$/model_speech/cnn_ctc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_speech/gru_ctc.py" beforeDir="false" afterPath="$PROJECT_DIR$/model_speech/gru_ctc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tutorial/CBHG_tutorail.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/CBHG_tutorail.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tutorial/CNN+CTC_tutorial.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/CNN+CTC_tutorial.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tutorial/self-attention_tutorial.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/self-attention_tutorial.ipynb" afterDir="false" />
@@ -19,36 +23,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tutorial/CNN+CTC_tutorial.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tutorial/self-attention_tutorial.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="0" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tutorial/CBHG_tutorail.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model_speech/cnn_ctc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="100">
+              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -57,27 +35,23 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/utils.py">
+        <entry file="file://$PROJECT_DIR$/model_language/transformer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
+            <state relative-caret-position="7120">
+              <caret line="356" column="68" selection-start-line="356" selection-start-column="68" selection-end-line="356" selection-end-column="68" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Anaconda3/envs/pinyin/Lib/site-packages/scipy/io/wavfile.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4540">
-              <caret line="232" selection-start-line="232" selection-end-line="232" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/train.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1260">
+            <state relative-caret-position="1096">
               <caret line="71" column="16" selection-start-line="71" selection-start-column="16" selection-end-line="71" selection-end-column="16" />
               <folding>
                 <element signature="e#14#23#0" expanded="true" />
@@ -88,6 +62,22 @@
       </file>
     </leaf>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>args</find>
+      <find>y_pred</find>
+      <find>Input</find>
+      <find>BatchNormalization</find>
+      <find>Lambda</find>
+      <find>ctc_lambda</find>
+      <find>dev</find>
+      <find>ctc_len</find>
+      <find>get_opcodes</find>
+      <find>Graph</find>
+      <find>arg</find>
+      <find>feedforward</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -96,7 +86,10 @@
       <list>
         <option value="$PROJECT_DIR$/tutorial/CBHG_tutorail.ipynb" />
         <option value="$PROJECT_DIR$/tutorial/CNN+CTC_tutorial.ipynb" />
+        <option value="$PROJECT_DIR$/model_speech/gru_ctc.py" />
+        <option value="$PROJECT_DIR$/model_speech/cnn_ctc.py" />
         <option value="$PROJECT_DIR$/utils.py" />
+        <option value="$PROJECT_DIR$/model_language/transformer.py" />
       </list>
     </option>
   </component>
@@ -112,7 +105,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -123,17 +115,13 @@
             <path>
               <item name="DeepSpeechRecognition" type="b2602c69:ProjectViewProjectNode" />
               <item name="DeepSpeechRecognition" type="462c0819:PsiDirectoryNode" />
-              <item name="logs_lm" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DeepSpeechRecognition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="DeepSpeechRecognition" type="462c0819:PsiDirectoryNode" />
-              <item name="model_speech" type="462c0819:PsiDirectoryNode" />
+              <item name="model_language" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -205,22 +193,27 @@
       <workItem from="1547623993882" duration="595000" />
       <workItem from="1551022886216" duration="156000" />
       <workItem from="1551229707133" duration="3677000" />
-      <workItem from="1551240383856" duration="1217000" />
+      <workItem from="1551240383856" duration="1816000" />
+      <workItem from="1551271047664" duration="1154000" />
+      <workItem from="1551340857916" duration="73000" />
+      <workItem from="1551343440039" duration="3198000" />
+      <workItem from="1551402105075" duration="19928000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12229000" />
+    <option name="totallyTimeSpent" value="37181000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20241287" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21313673" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3286119" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -242,48 +235,22 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/model_speech/gru_ctc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../tensorflow-master/tensorflow/examples/speech_commands/train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3060" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_speech/fsmn.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/tutorial/CNN+CTC_tutorial.ipynb">
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
-          <selected id="0" />
+          <selected id="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tutorial/self-attention_tutorial.ipynb">
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
-          <selected id="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tutorial/CBHG_tutorail.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model_speech/cnn_ctc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
+          <selected id="1" />
         </state>
       </provider>
     </entry>
@@ -294,9 +261,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tutorial/CBHG_tutorail.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Anaconda3/envs/pinyin/Lib/difflib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="538" column="36" lean-forward="true" selection-start-line="538" selection-start-column="36" selection-end-line="538" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_speech/fsmn.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_language/cbhg.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_speech/gru_ctc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1060">
+          <caret line="53" column="74" lean-forward="true" selection-start-line="53" selection-start-column="74" selection-end-line="53" selection-end-column="74" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_speech/cnn_ctc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4720">
+          <caret line="236" column="43" lean-forward="true" selection-start-line="236" selection-start-column="43" selection-end-line="236" selection-end-column="43" />
+          <folding>
+            <element signature="e#14#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
+        <state relative-caret-position="1096">
           <caret line="71" column="16" selection-start-line="71" selection-start-column="16" selection-end-line="71" selection-end-column="16" />
           <folding>
             <element signature="e#14#23#0" expanded="true" />
@@ -304,10 +324,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
+    <entry file="file://$PROJECT_DIR$/model_language/transformer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
+        <state relative-caret-position="7120">
+          <caret line="356" column="68" selection-start-line="356" selection-start-column="68" selection-end-line="356" selection-end-column="68" />
         </state>
       </provider>
     </entry>

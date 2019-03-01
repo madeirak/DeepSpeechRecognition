@@ -52,7 +52,7 @@ class Am():
         self.input_length = Input(name='input_length', shape=[1], dtype='int64')
         self.label_length = Input(name='label_length', shape=[1], dtype='int64')
         self.loss_out = Lambda(ctc_lambda, output_shape=(1,), name='ctc')\
-            ([self.labels, self.outputs, self.input_length, self.label_length])
+            ([self.labels, self.outputs, self.input_length, self.label_length])#shape(1,)表示一维且维度大小为1
         self.ctc_model = Model(inputs=[self.labels, self.inputs,
             self.input_length, self.label_length], outputs=self.loss_out)
 
