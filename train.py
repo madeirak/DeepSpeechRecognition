@@ -26,7 +26,8 @@ batch_num = len(train_data.wav_lst) // train_data.batch_size
 for k in range(epochs):
     print('this is the', k+1, 'th epochs trainning !!!')
     batch = train_data.get_am_batch()
-    am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=1)
+    am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=1)#generator=batch，batch是一个生成器
+                                                                          #steps_per_epoch：整数，当生成器返回steps_per_epoch次数据时计一个epoch
 
 am.ctc_model.save_weights('logs_am/model.h5')
 
@@ -43,14 +44,15 @@ with lm.graph.as_default():
     saver =tf.train.Saver()
 with tf.Session(graph=lm.graph) as sess:
     merged = tf.summary.merge_all()
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.global_variables_initializer())#全局（全部）变量初始化
     add_num = 0
     if os.path.exists('logs_lm/checkpoint'):
         print('loading language model...')
         latest = tf.train.latest_checkpoint('logs_lm')
-        add_num = int(latest.split('_')[-1])
+        add_num = int(latest.split('_')[-1])#分隔后保存为列表，取最后一个
         saver.restore(sess, latest)
     writer = tf.summary.FileWriter('logs_lm/tensorboard', tf.get_default_graph())
+
     for k in range(epochs):
         total_loss = 0
         batch = train_data.get_lm_batch()
