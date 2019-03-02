@@ -9,19 +9,21 @@ def normalize(inputs,
     Args:
       inputs: A tensor with 2 or more dimensions, where the first dimension has
         `batch_size`.
-      epsilon: A floating number. A very small number for preventing ZeroDivision Error.
-      scope: Optional scope for `variable_scope`.
-      reuse: Boolean, whether to reuse the weights of a previous layer
+      epsilon: A floating number. A very small number for preventing ZeroDivision Error.一个浮点数。用于防止除零错误的非常小的数字。
+      scope: Optional scope for `variable_scope`.“variable_scope”的可选范围。
+      reuse（重用）: Boolean, whether to reuse the weights of a previous layer
         by the same name.
 
     Returns:
       A tensor with the same shape and data dtype as `inputs`.
     '''
-    with tf.variable_scope(scope, reuse=reuse):
+    with tf.variable_scope(scope, reuse=reuse):#scope="ln";reuse=None
         inputs_shape = inputs.get_shape()
         params_shape = inputs_shape[-1:]
 
-        mean, variance = tf.nn.moments(inputs, [-1], keep_dims=True)
+        mean, variance = tf.nn.moments(inputs, [-1], keep_dims=True)#mean均值variance方差，
+                                                                    #keep_dims=True，表示产生的moment与输入具有相同维度
+                                                                    #返回两个tensor对象mean和variance
         beta= tf.Variable(tf.zeros(params_shape))
         gamma = tf.Variable(tf.ones(params_shape))
         normalized = (inputs - mean) / ( (variance + epsilon) ** (.5) )
@@ -35,7 +37,7 @@ def embedding(inputs,
               num_units, 
               zero_pad=True, 
               scale=True,
-              scope="embedding", 
+              scope="embedding",      #参数作用域“embedding”
               reuse=None):
     '''Embeds a given tensor.
     Args:
@@ -44,14 +46,14 @@ def embedding(inputs,
       vocab_size: An int. Vocabulary size.
       num_units: An int. Number of embedding hidden units.
       zero_pad: A boolean. If True, all the values of the fist row (id 0)
-        should be constant zeros.
-      scale: A boolean. If True. the outputs is multiplied by sqrt num_units.
+        should be constant zeros.                                               #如果zero_pad为true，0轴所有值应均为常数0
+      scale: A boolean. If True. the outputs is multiplied by sqrt num_units.   #如果只为true，输出乘以根号下num_units
       scope: Optional scope for `variable_scope`.
       reuse: Boolean, whether to reuse the weights of a previous layer
         by the same name.
     Returns:
       A `Tensor` with one more rank than inputs's. The last dimensionality
-        should be `num_units`.
+        should be `num_units`.                                                  #最后一维存储的是“num_units”
 
     For example,
 
@@ -93,13 +95,14 @@ def embedding(inputs,
         lookup_table = tf.get_variable('lookup_table',
                                        dtype=tf.float32,
                                        shape=[vocab_size, num_units],
-                                       initializer=tf.contrib.layers.xavier_initializer())
-        if zero_pad:
-            lookup_table = tf.concat((tf.zeros(shape=[1, num_units]),
-                                      lookup_table[1:, :]), 0)
+                                       initializer=tf.contrib.layers.xavier_initializer())#xavier_initializer这个初始化器是用来保持每一层的梯度大小都差不多相同。
+
+        if zero_pad:#如果zero_pad为true，0轴所有值应均为常数0
+            lookup_table = tf.concat((tf.zeros(shape=[1, num_units]),##concat合并数组，新建一个全是0的轴拼接
+                                      lookup_table[1:, :]), 0)#0指axis=0
         outputs = tf.nn.embedding_lookup(lookup_table, inputs)
 
-        if scale:
+        if scale:#如果scale为true，输出乘以根号下num_units
             outputs = outputs * (num_units ** 0.5) 
 
     return outputs
@@ -120,10 +123,10 @@ def multihead_attention(emb,
     Args:
       queries: A 3d tensor with shape of [N, T_q, C_q].
       keys: A 3d tensor with shape of [N, T_k, C_k].
-      num_units: A scalar. Attention size.
+      num_units: A scalar. Attention size.      #scalar标量
       dropout_rate: A floating point number.
-      is_training: Boolean. Controller of mechanism for dropout.
-      causality: Boolean. If true, units that reference the future are masked. 
+      is_training: Boolean. Controller of mechanism for dropout.  #dropout的控制机关
+      causality（因果关系）: Boolean. If true, units that reference the future are masked.
       num_heads: An int. Number of heads.
       scope: Optional scope for `variable_scope`.
       reuse: Boolean, whether to reuse the weights of a previous layer
@@ -135,7 +138,7 @@ def multihead_attention(emb,
     with tf.variable_scope(scope, reuse=reuse):
         # Set the fall back option for num_units
         if num_units is None:
-            num_units = queries.get_shape().as_list[-1]
+            num_units = queries.get_shape().as_list[-1]#返回queries的shape，返回的元组，as_list将它转换为列表
         
         # Linear projections
         Q = tf.layers.dense(queries, num_units, activation=tf.nn.relu) # (N, T_q, C)
@@ -143,28 +146,41 @@ def multihead_attention(emb,
         V = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
         
         # Split and concat
-        Q_ = tf.concat(tf.split(Q, num_heads, axis=2), axis=0) # (h*N, T_q, C/h) 
-        K_ = tf.concat(tf.split(K, num_heads, axis=2), axis=0) # (h*N, T_k, C/h) 
-        V_ = tf.concat(tf.split(V, num_heads, axis=2), axis=0) # (h*N, T_k, C/h) 
+        Q_ = tf.concat(tf.split(Q, num_heads, axis=2), axis=0) # (h*N, T_q, C/h)    #先在2轴上将Q分成头个数份，再在0轴上合并得到一个新张量Q_
+        K_ = tf.concat(tf.split(K, num_heads, axis=2), axis=0) # (h*N, T_k, C/h)    #h即头个数
+        V_ = tf.concat(tf.split(V, num_heads, axis=2), axis=0) # (h*N, T_k, C/h)    #低维拼接等于拿掉最外面括号，高维拼接是拿掉里面的括号(保证其他维度不变)。
 
         # Multiplication
-        outputs = tf.matmul(Q_, tf.transpose(K_, [0, 2, 1])) # (h*N, T_q, T_k)
+        outputs = tf.matmul(Q_, tf.transpose(K_, [0, 2, 1])) # (h*N, T_q, T_k)#matmul将两矩阵相乘；
+                                                             # transpose将K_根据[0,2,1]变换，即将1,2轴数据互换
         
         # Scale
-        outputs = outputs / (K_.get_shape().as_list()[-1] ** 0.5)
-        
-        # Key Masking
+        outputs = outputs / (K_.get_shape().as_list()[-1] ** 0.5)#返回K_的shape，返回的元组，as_list将它转换为列表
+
+
+
+        # Key Masking#掩码？
+                                           # tf.reduce_sum（） 计算一个张量的各个维度上元素的总和，axis指定维度
+        #y = sign(x),                      # 如果是二维数组的话，在某一维度上计算，可以理解为保留此维度 ，比如：
+        #x < 0, y = -1;                    # x = tf.constant([[1, 1, 1], [1, 1, 1]])
+        #x = 0, y = 0;                     # tf.reduce_sum(x, 0)  # [2, 2, 2]
+        #x > 0, y = 1;
         key_masks = tf.sign(tf.abs(tf.reduce_sum(emb, axis=-1))) # (N, T_k)
-        key_masks = tf.tile(key_masks, [num_heads, 1]) # (h*N, T_k)
+        key_masks = tf.tile(key_masks, [num_heads, 1]) # (h*N, T_k)    #tf.tile通过指定形状平铺给定的张量来构造张量
         key_masks = tf.tile(tf.expand_dims(key_masks, 1), [1, tf.shape(queries)[1], 1]) # (h*N, T_q, T_k)
-        
-        paddings = tf.ones_like(outputs)*(-2**32+1)
-        outputs = tf.where(tf.equal(key_masks, 0), paddings, outputs) # (h*N, T_q, T_k)
+                                                                                        # expand_dims在张量中插入一个维度，原先的维度一字排开
+        paddings = tf.ones_like(outputs)*(-2**32+1)      #ones_like(tensor)返回与tensor相同的类型和形状的全为1的张量.
+
+        outputs = tf.where(tf.equal(key_masks, 0), paddings, outputs) # (h*N, T_q, T_k)#where的第一个参数为一个bool型张量
+                                                                                       #tf.where(tensor,a,b)a,b为和tensor相同维度的tensor，
+                                                                                       #将tensor中的true位置元素替换为ａ中对应位置元素
+                                                                                       #false的替换为ｂ中对应位置元素。
   
         # Causality = Future blinding
-        if causality:
-            diag_vals = tf.ones_like(outputs[0, :, :]) # (T_q, T_k)
-            tril = tf.contrib.linalg.LinearOperatorTriL(diag_vals).to_dense() # (T_q, T_k)
+        if causality:  #causality=False
+            diag_vals = tf.ones_like(outputs[0, :, :]) # (T_q, T_k) #diagnosis特征 ones_like(tensor)返回与tensor相同的类型和形状的全为1的张量.
+            tril = tf.contrib.linalg.LinearOperatorTriL(diag_vals).to_dense() # (T_q, T_k)#返回一个表示此操作符的密集(批处理)矩阵。
+           #tril = tf.linalg.LinearOperatorLowerTriangular(diag_vals).to_dense()
             masks = tf.tile(tf.expand_dims(tril, 0), [tf.shape(outputs)[0], 1, 1]) # (h*N, T_q, T_k)
    
             paddings = tf.ones_like(masks)*(-2**32+1)
@@ -180,15 +196,15 @@ def multihead_attention(emb,
         outputs *= query_masks # broadcasting. (N, T_q, C)
           
         # Dropouts
-        outputs = tf.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        outputs = tf.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))#tf.convert_to_tensor把张量、数组、列表转换成tensor
                
         # Weighted sum
         outputs = tf.matmul(outputs, V_) # ( h*N, T_q, C/h)
         
-        # Restore shape
+        # Restore shape   #restore恢复，复原
         outputs = tf.concat(tf.split(outputs, num_heads, axis=0), axis=2 ) # (N, T_q, C)
               
-        # Residual connection
+        # Residual connection 残差连接
         outputs += queries
               
         # Normalize
@@ -217,14 +233,21 @@ def feedforward(inputs,
         # Inner layer
         params = {"inputs": inputs, "filters": num_units[0], "kernel_size": 1,
                   "activation": tf.nn.relu, "use_bias": True}
-        outputs = tf.layers.conv1d(**params)
+
+
+        # 将参数转换为dict类型
+        outputs = tf.layers.conv1d(**params)    #**params任意数目“键值对”参数的接收,将params用于设置conv1d
+                                                #def func(**kwargs)
+                                                #    print(kwargs)
+                                                #func({'key1:1,key2:2'})
+                                                #{'key1': 1, 'key2': 2}
         
         # Readout layer
         params = {"inputs": outputs, "filters": num_units[1], "kernel_size": 1,
                   "activation": None, "use_bias": True}
         outputs = tf.layers.conv1d(**params)
         
-        # Residual connection
+        # Residual connection   残差连接
         outputs += inputs
         
         # Normalize
@@ -233,7 +256,7 @@ def feedforward(inputs,
     return outputs
 
 
-def label_smoothing(inputs, epsilon=0.1):
+def label_smoothing(inputs, epsilon=0.1):#对于训练有好处，将0变为接近零的小数，1变为接近1的数
     '''Applies label smoothing. See https://arxiv.org/abs/1512.00567.
     
     Args:
@@ -273,7 +296,7 @@ class Lm():
     def __init__(self, arg):
         self.graph = tf.Graph()
         with self.graph.as_default():
-            self.is_training = arg.is_training
+            self.is_training = arg.is_training#is_training: Boolean. Controller of mechanism for dropout.#dropout的控制机关
             self.hidden_units = arg.hidden_units
             self.input_vocab_size = arg.input_vocab_size
             self.label_vocab_size = arg.label_vocab_size
@@ -284,12 +307,12 @@ class Lm():
             self.dropout_rate = arg.dropout_rate
                 
             # input
-            self.x = tf.placeholder(tf.int32, shape=(None, None))
+            self.x = tf.placeholder(tf.int32, shape=(None, None))#placeholder在tensorflow中类似于函数参数，运行时必须传入值。
             self.y = tf.placeholder(tf.int32, shape=(None, None))
             # embedding
             self.emb = embedding(self.x, vocab_size=self.input_vocab_size, num_units=self.hidden_units, scale=True, scope="enc_embed")
             self.enc = self.emb + embedding(tf.tile(tf.expand_dims(tf.range(tf.shape(self.x)[1]), 0), [tf.shape(self.x)[0], 1]),
-                                        vocab_size=self.max_length,num_units=self.hidden_units, zero_pad=False, scale=False,scope="enc_pe")
+                                   vocab_size=self.max_length,num_units=self.hidden_units, zero_pad=False, scale=False,scope="enc_pe")
             ## Dropout
             self.enc = tf.layers.dropout(self.enc, 
                                         rate=self.dropout_rate, 
@@ -297,10 +320,10 @@ class Lm():
                         
             ## Blocks
             for i in range(self.num_blocks):
-                with tf.variable_scope("num_blocks_{}".format(i)):
+                with tf.variable_scope("num_blocks_{}".format(i)):#黄色{}是占位符，输出时，i会被填入{}
                     ### Multihead Attention
                     self.enc = multihead_attention(emb = self.emb,
-                                                    queries=self.enc, 
+                                                    queries=self.enc,       #self_attention
                                                     keys=self.enc, 
                                                     num_units=self.hidden_units, 
                                                     num_heads=self.num_heads, 
@@ -312,26 +335,26 @@ class Lm():
             self.outputs = feedforward(self.enc, num_units=[4*self.hidden_units, self.hidden_units])
                                     
             # Final linear projection
-            self.logits = tf.layers.dense(self.outputs, self.label_vocab_size)
-            self.preds = tf.to_int32(tf.argmax(self.logits, axis=-1))
+            self.logits = tf.layers.dense(self.outputs,  self.label_vocab_size)
+            self.preds = tf.to_int32(tf.argmax(self.logits, axis=-1))#tf.argmax它能给出某个tensor对象在某一维上的其数据最大值所在的索引值
             self.istarget = tf.to_float(tf.not_equal(self.y, 0))
             self.acc = tf.reduce_sum(tf.to_float(tf.equal(self.preds, self.y))*self.istarget)/ (tf.reduce_sum(self.istarget))
-            tf.summary.scalar('acc', self.acc)
+            tf.summary.scalar('acc', self.acc)#用来显示标量信息，一般在画loss,accuary时会用到这个函数
                         
             if self.is_training:  
                 # Loss
-                self.y_smoothed = label_smoothing(tf.one_hot(self.y, depth=self.label_vocab_size))
-                self.loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=self.logits, labels=self.y_smoothed)
+                self.y_smoothed = label_smoothing(tf.one_hot(self.y, depth=self.label_vocab_size))#tf.one_hot生成独热向量    https://www.w3cschool.cn/tensorflow_python/tensorflow_python-fh1b2fsm.html
+                self.loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=self.logits, labels=self.y_smoothed)#entropy熵
                 self.mean_loss = tf.reduce_sum(self.loss*self.istarget) / (tf.reduce_sum(self.istarget))
                 
                 # Training Scheme
-                self.global_step = tf.Variable(0, name='global_step', trainable=False)
+                self.global_step = tf.Variable(0, name='global_step', trainable=False)#global_step代表全局步数，比如在多少步该进行什么操作,类似时钟
                 self.optimizer = tf.train.AdamOptimizer(learning_rate=self.lr, beta1=0.9, beta2=0.98, epsilon=1e-8)
                 self.train_op = self.optimizer.minimize(self.mean_loss, global_step=self.global_step)
                         
                 # Summary 
-                tf.summary.scalar('mean_loss', self.mean_loss)
-                self.merged = tf.summary.merge_all()
+                tf.summary.scalar('mean_loss', self.mean_loss)#输出Summary包含单个标量值的协议缓冲区。
+                self.merged = tf.summary.merge_all()#合并默认图表中收集的所有摘要。
 
 
 def lm_hparams():
