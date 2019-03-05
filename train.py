@@ -50,22 +50,30 @@ batch_num = len(train_data.wav_lst) // train_data.batch_size
 
 
 # checkpoint
-ckpt = "model_{epoch:02d}-{val_acc:.2f}.hdf5"
-checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_acc', save_weights_only=False, verbose=1, save_best_only=True)
+ckpt = "model_{epoch:02d}-{val_acc:.2f}.hdf5"#字符串中包含格式化选项（named formatting options），epoch_num和validation_accuracy验证准确率
+                                             #“:02d”表示右对齐长度为2
+checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_acc',
+                             save_weights_only=False, verbose=1, save_best_only=True)
+                            #若出现”./”开头的参数，会从”./”开头的参数的上一个参数开始拼接。
+                            #monitor='val_acc'监测验证准确率
+                            #verbose详细模式，0为不打印输出信息，1位打印输出
+                            #save_weights_only=False，不只保存权重而是整个模型
 
 #
 # for k in range(epochs):
 #     print('this is the', k+1, 'th epochs trainning !!!')
 #     batch = train_data.get_am_batch()
 #     dev_batch = dev_data.get_am_batch()
-#     am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=10, callbacks=[checkpoint], workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=200)
+#     am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=10, callbacks=[checkpoint],
+#     workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=200)
 
 batch = train_data.get_am_batch()
 dev_batch = dev_data.get_am_batch()
 
+am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=10, callbacks=[checkpoint],
+                           workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=200)
+ #（训练数据生成器实例，一个epoch有几个batch(batch_num)，epoch，回调函数，最大进程数，不用多线程，验证数据生成器，设置验证多少次数据后取平均值作为此epoch训练后的效果）
 
-
-am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=10, callbacks=[checkpoint], workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=200)
 am.ctc_model.save_weights('logs_am/model.h5')
 
 

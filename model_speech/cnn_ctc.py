@@ -19,9 +19,10 @@ def am_hparams():
 
 
 # =============================搭建模型====================================
-class Am():
+
+class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向传播来构建完全可自定义的模型。
     """docstring for Amodel."""
-    def __init__(self, args):
+    def __init__(self, args):#将类实例的属性应用到后续的层创建中
         self.vocab_size = args.vocab_size
         self.gpu_nums = args.gpu_nums
         self.lr = args.lr
@@ -31,8 +32,8 @@ class Am():
             self._ctc_init()
             self.opt_init()
 
-    def _model_init(self):
-        self.inputs = Input(name='the_inputs', shape=(None, 200, 1))#shape限定三维张量，第一维是batch_size
+    def _model_init(self):#创建层，并定义前向传播
+        self.inputs = Input(name='the_inputs', shape=(None, 200, 1))#shape限定三维张量，第一维是batch_num？
                                                                     #Input用于实例化keras张量，产生象征性的张量，类似于占位符，name是它的名字
 
         self.h1 = cnn_cell(32, self.inputs)  #第一个参数size，输出空间的维数，即卷积层中的滤波器数目
@@ -40,23 +41,23 @@ class Am():
         self.h3 = cnn_cell(128, self.h2)
         self.h4 = cnn_cell(128, self.h3, pool=False)
         self.h5 = cnn_cell(128, self.h4, pool=False)
-        # 200 / 8 * 128 = 3200
+        # 200 / 8 * 128 = 3200 权重数
         self.h6 = Reshape((-1, 3200))(self.h5)#-1是占位符，这一维的长度根据其他维而定
         self.h6 = Dropout(0.2)(self.h6)
         self.h7 = dense(256)(self.h6)
         self.h7 = Dropout(0.2)(self.h7)
         self.outputs = dense(self.vocab_size, activation='softmax')(self.h7)
-        self.model = Model(inputs=self.inputs, outputs=self.outputs)
+        self.model = Model(inputs=self.inputs, outputs=self.outputs)#实例化上述自定义模型
         self.model.summary()
 
-    def _ctc_init(self):
+    def _ctc_init(self):#计算ctc损失的模型自定义
         self.labels = Input(name='the_labels', shape=[None], dtype='float32')
         self.input_length = Input(name='input_length', shape=[1], dtype='int64')
         self.label_length = Input(name='label_length', shape=[1], dtype='int64')
 
         self.loss_out = Lambda(ctc_lambda, output_shape=(1,), name='ctc')\
-            ([self.labels, self.outputs, self.input_length, self.label_length])#Lambda将任意表达式包装为“层”对象
-                                                                               #shape(1,)表示该层输出维度为一维且维度大小为1
+        ([self.labels, self.outputs, self.input_length, self.label_length])#“Lambda”API用于将任意表达式包装为“层”对象
+                                                                           #反斜杠“\”是用来连接多行较长的语句
         self.ctc_model = Model(inputs=[self.labels, self.inputs,
             self.input_length, self.label_length], outputs=self.loss_out)#Model从输入（inputs）和输出（outputs）创建模型
 
@@ -81,6 +82,8 @@ def ctc_lambda(args):
                                                         #input_length是y_pred中每个批元素的序列长度
     y_pred = y_pred[:, :, :]#截取y_pred前三维
     return K.ctc_batch_cost(labels, y_pred, input_length, label_length)#在每个批上运行ctc损失算法
+                                                                       #ctc_batch_cost()返回具有(item_num_of_batch，1)形状的张量,
+                                                                       #包含每个item的CTC损失
 
 def conv2d(size):
     return Conv2D(size, (3,3), use_bias=True, activation='relu',
@@ -92,7 +95,7 @@ def norm(x):
 
 
 def maxpool(x):
-    return MaxPooling2D(pool_size=(2,2), strides=None, padding="valid")(x)#valid表示不padding，步长strides=None表示不重叠且紧贴
+    return MaxPooling2D(pool_size=(2,2), strides=None, padding="valid")(x)#valid表示不padding，步长strides=None表示不重叠且紧贴，所以维度会减半
 
 
 def dense(units, activation="relu"):
