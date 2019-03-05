@@ -74,7 +74,8 @@ am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=10, callback
                            workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=200)
  #（训练数据生成器实例，一个epoch有几个batch(batch_num)，epoch，回调函数，最大进程数，不用多线程，验证数据生成器，设置验证多少次数据后取平均值作为此epoch训练后的效果）
 
-am.ctc_model.save_weights('logs_am/model.h5')
+am.ctc_model.save_weights('logs_am/model.h5')#保存所有层的权重，“h5”表示HDF5格式保存
+                                            #默认情况下，会以 TensorFlow 检查点文件格式保存模型的权重。权重也可以另存为 Keras HDF5 格式
 
 
 # 2.语言模型训练-------------------------------------------
@@ -94,9 +95,9 @@ lm = Lm(lm_args)
 epochs = 10
 with lm.graph.as_default():
     saver =tf.train.Saver()
-with tf.Session(graph=lm.graph) as sess:
+with tf.Session(graph=lm.graph) as sess:#创建会话对象sess。会话会封装TensorFlow运行时的状态，并运行TensorFlow操作。
     merged = tf.summary.merge_all()
-    sess.run(tf.global_variables_initializer())#全局（全部）变量初始化
+    sess.run(tf.global_variables_initializer())#初始化图中的所有变量（可训练参数）
     add_num = 0
     if os.path.exists('logs_lm/checkpoint'):
         print('loading language model...')
@@ -111,7 +112,9 @@ with tf.Session(graph=lm.graph) as sess:
         for i in range(batch_num):
             input_batch, label_batch = next(batch)
             feed = {lm.x: input_batch, lm.y: label_batch}
-            cost,_ = sess.run([lm.mean_loss,lm.train_op], feed_dict=feed)
+            cost,_ = sess.run([lm.mean_loss,lm.train_op], feed_dict=feed)#run方法的feed_dict参数为占位符提供具体的值
+                                                                         #因为run的返回和输入有相同的布局，又feed_dict是一个指令
+                                                                         #而不是一个张量，不会返回一个值，所以用“_”
             total_loss += cost
             if (k * batch_num + i) % 10 == 0:
                 rs=sess.run(merged, feed_dict=feed)

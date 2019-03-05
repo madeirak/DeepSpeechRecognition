@@ -307,7 +307,7 @@ class Lm():
             self.dropout_rate = arg.dropout_rate
                 
             # input
-            self.x = tf.placeholder(tf.int32, shape=(None, None))#placeholder在tensorflow中类似于函数参数，运行时必须传入值。
+            self.x = tf.placeholder(tf.int32, shape=(None, None))#placeholder在tensorflow中类似于函数参数，承诺在稍后提供值。（图的输入）
             self.y = tf.placeholder(tf.int32, shape=(None, None))
             # embedding
             self.emb = embedding(self.x, vocab_size=self.input_vocab_size, num_units=self.hidden_units, scale=True, scope="enc_embed")
