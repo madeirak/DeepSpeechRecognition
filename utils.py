@@ -231,7 +231,7 @@ def compute_fbank(file):
 
 # word error rate------------------------------------
 def GetEditDistance(str1, str2):#编辑距离是指两个字串之间，由一个转成另一个所需的最少编辑操作次数。
-								#许可的编辑操作包括将一个字符替换成另一个字符，插入一个字符，删除一个字符
+								#许可的编辑操作包括单个字符的替换，插入，删除
 	leven_cost = 0
 	s = difflib.SequenceMatcher(None, str1, str2)#	None处为丢弃函数，此处设置不丢弃。SequenceMatcher是构造函数，主要创建任何类型序列的比较对象
 	for tag, i1, i2, j1, j2 in s.get_opcodes():

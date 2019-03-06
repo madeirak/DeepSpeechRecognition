@@ -342,16 +342,19 @@ class Lm():
             self.outputs = feedforward(self.enc, num_units=[4*self.hidden_units, self.hidden_units])
                                     
             # Final linear projection
-            self.logits = tf.layers.dense(self.outputs,  self.label_vocab_size)
+            self.logits = tf.layers.dense(self.outputs,  self.label_vocab_size)#logits，尚未被softmax归一化的对数概率，可作为softmax输入
             self.preds = tf.to_int32(tf.argmax(self.logits, axis=-1))#tf.argmax它能给出某个tensor对象在某一维上的其数据最大值所在的索引值
-            self.istarget = tf.to_float(tf.not_equal(self.y, 0))
+            self.istarget = tf.to_float(tf.not_equal(self.y, 0))#not_equal返回bool类型张量，保证y不等于0
             self.acc = tf.reduce_sum(tf.to_float(tf.equal(self.preds, self.y))*self.istarget)/ (tf.reduce_sum(self.istarget))
             tf.summary.scalar('acc', self.acc)#为了收集数据，向输出准确率的节点附加tf.summary.scalar操作
                                               #为scalar_summary分配一个有意义的标签（tag），此处为"acc"
                         
             if self.is_training:  
                 # Loss
-                self.y_smoothed = label_smoothing(tf.one_hot(self.y, depth=self.label_vocab_size))#tf.one_hot生成独热向量    https://www.w3cschool.cn/tensorflow_python/tensorflow_python-fh1b2fsm.html
+                self.y_smoothed = label_smoothing(tf.one_hot(self.y, depth=self.label_vocab_size))#tf.one_hot生成独热向量
+                                                                                        #索引中由索引self.y表示的位置取值1,而所有其他位置都取值0
+                                                                                        #one_hot返回3维张量（batch，features，depth）
+                                                                                        #https://www.w3cschool.cn/tensorflow_python/tensorflow_python-fh1b2fsm.html
                 self.loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=self.logits, labels=self.y_smoothed)#entropy熵
                 self.mean_loss = tf.reduce_sum(self.loss*self.istarget) / (tf.reduce_sum(self.istarget))
                 
@@ -359,8 +362,9 @@ class Lm():
                 self.global_step = tf.Variable(0, name='global_step', trainable=False)#global_step代表全局步数，比如在多少步该进行什么操作,类似时钟
                 self.optimizer = tf.train.AdamOptimizer(learning_rate=self.lr, beta1=0.9, beta2=0.98, epsilon=1e-8)
                 self.train_op = self.optimizer.minimize(self.mean_loss, global_step=self.global_step)
+                                                                                     #minimize(包含要最小化的值的tensor,每次变量更新后step加1)
                         
-                # Summary 
+                # Summary
                 tf.summary.scalar('mean_loss', self.mean_loss)#为了收集数据，向输出mean_loss的节点附加tf.summary.scalar操作
                                                               #为scalar_summary分配一个有意义的标签（tag），此处为"mean_loss"
                 self.merged = tf.summary.merge_all()#将之前创建的所有总结节点（tf.summary.scalar），合并为一个操作，方便之后运行生成汇总数据

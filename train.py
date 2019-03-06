@@ -104,9 +104,11 @@ with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。�
     add_num = 0
     if os.path.exists('logs_lm/checkpoint'):
         print('loading language model...')
-        latest = tf.train.latest_checkpoint('logs_lm')
+        latest = tf.train.latest_checkpoint('logs_lm')#查找最新保存的检查点文件的文件名，latest_checkpoint(checkpoint_dir)
         add_num = int(latest.split('_')[-1])#分隔后保存为列表，取最后一个
-        saver.restore(sess, latest)#恢复
+        saver.restore(sess, latest)#restore(sess,save_path)，需要启动图表的会话。要恢复的变量不必初始化，因为恢复本身就是一种初始化变量的方法。
+                                   #该save_path参数通常是先前从save()调用或调用返回的值 latest_checkpoint()
+
     writer = tf.summary.FileWriter('logs_lm/tensorboard', tf.get_default_graph())#FileWriter（logdir,graph）
                                                                                  #所有事件都会写到logdir所指的目录下
                                                                                  #接收到Graph对象，则会将图与张量形状信息一起可视化
