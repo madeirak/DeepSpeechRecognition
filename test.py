@@ -59,7 +59,7 @@ for i in range(10):
     result = am.model.predict(x, steps=1)#steps预测周期结束前的总步骤数(样品批次)，predict返回numpy数组类型的预测
 
     # 将数字结果转化为文本结果
-    _, text = decode_ctc(result, train_data.am_vocab)#num2word
+    _, text = decode_ctc(result, train_data.am_vocab)#num2pny
     text = ' '.join(text)#以空格为分隔符合将多元素列表text合并成一个字符串
     print('文本结果：', text)
     print('原文结果：', ' '.join(y))#以空格为分隔符将多元素列表y合并成一个字符串
