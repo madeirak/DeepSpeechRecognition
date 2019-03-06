@@ -294,8 +294,8 @@ def label_smoothing(inputs, epsilon=0.1):#对于训练有好处，将0变为接�
 
 class Lm():
     def __init__(self, arg):
-        self.graph = tf.Graph()
-        with self.graph.as_default():
+        self.graph = tf.Graph()#实例化
+        with self.graph.as_default():#as_default()，将此图作为运行环境的默认图
             self.is_training = arg.is_training#is_training: Boolean. Controller of mechanism for dropout.#dropout的控制机关
             self.hidden_units = arg.hidden_units
             self.input_vocab_size = arg.input_vocab_size
@@ -313,6 +313,13 @@ class Lm():
             self.emb = embedding(self.x, vocab_size=self.input_vocab_size, num_units=self.hidden_units, scale=True, scope="enc_embed")
             self.enc = self.emb + embedding(tf.tile(tf.expand_dims(tf.range(tf.shape(self.x)[1]), 0), [tf.shape(self.x)[0], 1]),
                                    vocab_size=self.max_length,num_units=self.hidden_units, zero_pad=False, scale=False,scope="enc_pe")
+                                                                                             #tf.range（x）创建0到x的序列
+                                                                                             #tf.tile()扩展张量tf.tile(input, multiples）
+                                                                                             #multiples是一个一维张量
+                                                                                             #表示将input的每个维度重复几次
+
+
+
             ## Dropout
             self.enc = tf.layers.dropout(self.enc, 
                                         rate=self.dropout_rate, 
@@ -339,7 +346,8 @@ class Lm():
             self.preds = tf.to_int32(tf.argmax(self.logits, axis=-1))#tf.argmax它能给出某个tensor对象在某一维上的其数据最大值所在的索引值
             self.istarget = tf.to_float(tf.not_equal(self.y, 0))
             self.acc = tf.reduce_sum(tf.to_float(tf.equal(self.preds, self.y))*self.istarget)/ (tf.reduce_sum(self.istarget))
-            tf.summary.scalar('acc', self.acc)#用来显示标量信息，一般在画loss,accuary时会用到这个函数
+            tf.summary.scalar('acc', self.acc)#为了收集数据，向输出准确率的节点附加tf.summary.scalar操作
+                                              #为scalar_summary分配一个有意义的标签（tag），此处为"acc"
                         
             if self.is_training:  
                 # Loss
@@ -353,8 +361,9 @@ class Lm():
                 self.train_op = self.optimizer.minimize(self.mean_loss, global_step=self.global_step)
                         
                 # Summary 
-                tf.summary.scalar('mean_loss', self.mean_loss)#输出Summary包含单个标量值的协议缓冲区。
-                self.merged = tf.summary.merge_all()#合并默认图表中收集的所有摘要。
+                tf.summary.scalar('mean_loss', self.mean_loss)#为了收集数据，向输出mean_loss的节点附加tf.summary.scalar操作
+                                                              #为scalar_summary分配一个有意义的标签（tag），此处为"mean_loss"
+                self.merged = tf.summary.merge_all()#将之前创建的所有总结节点（tf.summary.scalar），合并为一个操作，方便之后运行生成汇总数据
 
 
 def lm_hparams():

@@ -93,18 +93,23 @@ lm_args.is_training = True
 lm = Lm(lm_args)
 
 epochs = 10
-with lm.graph.as_default():
-    saver =tf.train.Saver()
-with tf.Session(graph=lm.graph) as sess:#创建会话对象sess。会话会封装TensorFlow运行时的状态，并运行TensorFlow操作。
-    merged = tf.summary.merge_all()
+with lm.graph.as_default():#as_default()，将此图作为运行环境的默认图
+    saver =tf.train.Saver()#tf.train.Saver 构造函数会针对图中所有变量将save和restore操作添加到图中。
+with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。会话会封装TensorFlow运行时的状态，并运行TensorFlow操作。
+                                        #由于 tf.Session 拥有物理资源（例如 GPU 和网络连接），因此通常（在with代码块中）
+                                        #用作上下文管理器，并在您退出代码块时自动关闭会话。
+
+    merged = tf.summary.merge_all()#将之前创建的所有总结节点（tf.summary.scalar），合并为一个操作，方便之后运行生成汇总数据
     sess.run(tf.global_variables_initializer())#初始化图中的所有变量（可训练参数）
     add_num = 0
     if os.path.exists('logs_lm/checkpoint'):
         print('loading language model...')
         latest = tf.train.latest_checkpoint('logs_lm')
         add_num = int(latest.split('_')[-1])#分隔后保存为列表，取最后一个
-        saver.restore(sess, latest)
-    writer = tf.summary.FileWriter('logs_lm/tensorboard', tf.get_default_graph())
+        saver.restore(sess, latest)#恢复
+    writer = tf.summary.FileWriter('logs_lm/tensorboard', tf.get_default_graph())#FileWriter（logdir,graph）
+                                                                                 #所有事件都会写到logdir所指的目录下
+                                                                                 #接收到Graph对象，则会将图与张量形状信息一起可视化
 
     for k in range(epochs):
         total_loss = 0
@@ -117,8 +122,8 @@ with tf.Session(graph=lm.graph) as sess:#创建会话对象sess。会话会封�
                                                                          #而不是一个张量，不会返回一个值，所以用“_”
             total_loss += cost
             if (k * batch_num + i) % 10 == 0:
-                rs=sess.run(merged, feed_dict=feed)
-                writer.add_summary(rs, k * batch_num + i)
+                rs=sess.run(merged, feed_dict=feed)#运行merged操作，收集汇总数据
+                writer.add_summary(rs, k * batch_num + i)#训练时添加总结
         print('epochs', k+1, ': average loss = ', total_loss/batch_num)
-    saver.save(sess, 'logs_lm/model_%d' % (epochs + add_num))
+    saver.save(sess, 'logs_lm/model_%d' % (epochs + add_num))#将图中训练后的变量保存
     writer.close()
