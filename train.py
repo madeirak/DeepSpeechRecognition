@@ -52,12 +52,15 @@ batch_num = len(train_data.wav_lst) // train_data.batch_size
 # checkpoint
 ckpt = "model_{epoch:02d}-{val_acc:.2f}.hdf5"#字符串中包含格式化选项（named formatting options），epoch_num和validation_accuracy验证准确率
                                              #“:02d”表示右对齐长度为2
-checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_acc',
-                             save_weights_only=False, verbose=1, save_best_only=True)
+#checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_acc',
+#                             save_weights_only=False, verbose=1, save_best_only=True)
                             #若出现”./”开头的参数，会从”./”开头的参数的上一个参数开始拼接。
                             #monitor='val_acc'监测验证准确率
                             #verbose详细模式，0为不打印输出信息，1位打印输出
                             #save_weights_only=False，不只保存权重而是整个模型
+checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_loss',
+                             save_weights_only=False, verbose=1, save_best_only=True)
+
 
 #
 # for k in range(epochs):
@@ -127,5 +130,8 @@ with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。�
                 rs=sess.run(merged, feed_dict=feed)#运行merged操作，收集汇总数据
                 writer.add_summary(rs, k * batch_num + i)#训练时添加总结
         print('epochs', k+1, ': average loss = ', total_loss/batch_num)
+
     saver.save(sess, 'logs_lm/model_%d' % (epochs + add_num))#将图中训练后的变量保存
     writer.close()
+
+
