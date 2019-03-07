@@ -20,7 +20,8 @@ def data_hparams():
 		prime = False,
 		stcmd = False,
 		batch_size = 1,
-		data_length = 10,
+		data_length=None,#作者做实验时写小一些看效果用的，正常使用设为None
+		#data_length = 10,
 		shuffle = True)
 
     return params
