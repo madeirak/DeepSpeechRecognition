@@ -21,7 +21,7 @@ sess = tf.Session(graph=lm.graph)
 with lm.graph.as_default():
     saver =tf.train.Saver()
 with sess.as_default():#创建默认会话
-    latest = tf.train.latest_checkpoint('logs_lm')#查找最新保存的检查点文件的文件名，latest_checkpoint(checkpoint_dir)
+    latest = tf.train.latest_checkpoint('G:/DeepSpeechRecognition/logs_lm')#查找最新保存的检查点文件的文件名，latest_checkpoint(checkpoint_dir)
     saver.restore(sess, latest)#restore(sess,save_path)，需要启动图表的会话
                                # 该save_path参数通常是先前从save()调用或调用返回的值latest_checkpoint()
 

@@ -29,6 +29,7 @@ lm_args.input_vocab_size = len(train_data.pny_vocab)
 lm_args.label_vocab_size = len(train_data.han_vocab)
 lm_args.dropout_rate = 0.
 print('loading language model...')
+
 lm = Lm(lm_args)
 sess = tf.Session(graph=lm.graph)
 with lm.graph.as_default():
@@ -40,7 +41,7 @@ with sess.as_default():#创建默认会话
 
 # 3. 准备测试所需数据， 不必和训练数据一致，通过设置data_args.data_type测试，
 #    此处应设为'test'，我用了'train'因为演示模型较小，如果使用'test'看不出效果，
-#    且会出现未出现的词。？？？
+#    且会出现未出现的词。嗯？？？
 data_args.data_type = 'train'
 data_args.shuffle = False
 data_args.batch_size = 1
@@ -54,7 +55,7 @@ for i in range(10):
     print('\n the ', i, 'th example.')
     # 载入训练好的模型，并进行识别
     inputs, _ = next(am_batch)#yield inputs, outputs
-    x = inputs['the_inputs']#'the_inputs': pad_wav_data
+    x = inputs['the_inputs']#即x = pad_wav_data
     y = test_data.pny_lst[i]
     result = am.model.predict(x, steps=1)#steps预测周期结束前的总步骤数(样品批次)，predict返回numpy数组类型的预测
 

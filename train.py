@@ -14,8 +14,8 @@ data_args.prime = True
 data_args.stcmd = True
 data_args.batch_size = 4
 data_args.data_length = 10
-# data_args.data_length = None
-data_args.shuffle = True
+data_args.data_length = None #作者做实验时写小一些看效果用的，正常使用设为None，用于截取部分的lst数据
+#data_args.shuffle = True
 train_data = get_data(data_args)
 
 # 0.准备验证所需数据------------------------------
@@ -27,8 +27,8 @@ data_args.aishell = True
 data_args.prime = False
 data_args.stcmd = False
 data_args.batch_size = 4
-# data_args.data_length = None
-data_args.data_length = 10
+data_args.data_length = None #作者做实验时写小一些看效果用的，正常使用设为None
+#data_args.data_length = 10
 data_args.shuffle = True
 dev_data = get_data(data_args)
 
@@ -93,11 +93,11 @@ lm_args.hidden_units = 512
 lm_args.dropout_rate = 0.2
 lm_args.lr = 0.0003
 lm_args.is_training = True
-lm = Lm(lm_args)
 
+lm = Lm(lm_args)
 epochs = 10
 with lm.graph.as_default():#as_default()，将此图作为运行环境的默认图
-    saver =tf.train.Saver()#tf.train.Saver 构造函数会针对图中所有变量将save和restore操作添加到图中。
+    saver =tf.train.Saver()#tf.train.Saver 构造函数会针对图中所有变量将 save和restore操作 添加到图中。
 with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。会话会封装TensorFlow运行时的状态，并运行TensorFlow操作。
                                         #由于 tf.Session 拥有物理资源（例如 GPU 和网络连接），因此通常（在with代码块中）
                                         #用作上下文管理器，并在您退出代码块时自动关闭会话。
@@ -125,13 +125,15 @@ with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。�
             cost,_ = sess.run([lm.mean_loss,lm.train_op], feed_dict=feed)#run方法的feed_dict参数为占位符提供具体的值
                                                                          #因为run的返回和输入有相同的布局，又feed_dict是一个指令
                                                                          #而不是一个张量，不会返回一个值，所以用“_”
+                                                                         #op:optimizer
+                                                                         #mean_loss:batch_mean_loss
             total_loss += cost
             if (k * batch_num + i) % 10 == 0:
                 rs=sess.run(merged, feed_dict=feed)#运行merged操作，收集汇总数据
                 writer.add_summary(rs, k * batch_num + i)#训练时添加总结
         print('epochs', k+1, ': average loss = ', total_loss/batch_num)
 
-    saver.save(sess, 'logs_lm/model_%d' % (epochs + add_num))#将图中训练后的变量保存
+    saver.save(sess, 'logs_lm/model_%d' % (epochs + add_num))#将图中训练后的变量保存到检查点文件中
     writer.close()
 
 

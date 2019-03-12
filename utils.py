@@ -20,8 +20,8 @@ def data_hparams():
 		prime = False,
 		stcmd = False,
 		batch_size = 1,
-		data_length=None,#作者做实验时写小一些看效果用的，正常使用设为None
-		#data_length = 10,
+		#data_length=None,#作者做实验时写小一些看效果用的，正常使用设为None
+		data_length = 10,
 		shuffle = True)
 
     return params
@@ -69,14 +69,16 @@ class get_data():
 			print('load ', file, ' data...')
 			sub_file = 'data/' + file
 			with open(sub_file, 'r', encoding='utf8') as f:
-				data = f.readlines()							#readlines（）返回以行为单位的列表
+				data = f.readlines()						#readlines（）返回包含所有行的，每个行是一个元素的列表，碰到结束符EOF则返回空字符串
 			for line in tqdm(data):
 				wav_file, pny, han = line.split('\t')
 				self.wav_lst.append(wav_file)
-				self.pny_lst.append([i for i in pny.split(' ') if i != ''])#拼音去掉中间空格后挨个接在pny_lst
-				self.han_lst.append(''.join(han.strip('\n').split(' ')))#将空格作为分隔符，将去掉‘\n’的汉字连接成一个字符串，最后在用空格分隔成列表
+				self.pny_lst.append([i for i in pny.split(' ') if i != ''])#拼音去掉中间空格后挨个作为元素接在pny_lst
+				self.han_lst.append(''.join(han.strip('\n').split(' ')))#将两端去掉‘\n’，空格为分隔符分隔的汉字用空格连接成一个字符串，再接在han_lst表后，
+																		#一行字作为字符串作为表的一个元素
+
 		if self.data_length:
-			self.wav_lst = self.wav_lst[:self.data_length]#截取设定长度数据
+			self.wav_lst = self.wav_lst[:self.data_length]#如需，截取设定长度数据的lst中数据，train.py中设置为10
 			self.pny_lst = self.pny_lst[:self.data_length]
 			self.han_lst = self.han_lst[:self.data_length]
 		print('make am vocab...')
@@ -85,6 +87,7 @@ class get_data():
 		self.pny_vocab = self.mk_lm_pny_vocab(self.pny_lst)
 		print('make lm hanzi vocab...')
 		self.han_vocab = self.mk_lm_han_vocab(self.han_lst)
+
 
 	def get_am_batch(self):
 		shuffle_list = [i for i in range(len(self.wav_lst))]#打乱数据的顺序，我们通过查询乱序的索引值，来确定训练数据的顺序
@@ -97,20 +100,25 @@ class get_data():
 			label_data_lst = []
 			begin = i * self.batch_size  #先确定该batch起始点
 			end = begin + self.batch_size
-			sub_list = shuffle_list[begin:end]  #sub_list子列表
+			sub_list = shuffle_list[begin:end]
 
-			for index in sub_list:
-				fbank = compute_fbank(self.data_path + self.wav_lst[index])
+			for index in sub_list:#将wav_lst中的元素打乱训练
+				fbank = compute_fbank(self.data_path + self.wav_lst[index])#fbank.shape = (帧数，200)
+
 				pad_fbank = np.zeros((fbank.shape[0]//8*8+8, fbank.shape[1]))  #“//”整除，向下取整，“//”与“*”优先级相同，从左往右计算
-																				#结果是fbank.shape[0]可以被8整除
+																				#结果是fbank.shape[0]即每个元素的帧长可以被8整除
 				pad_fbank[:fbank.shape[0], :] = fbank
+
 				label = self.pny2id(self.pny_lst[index], self.am_vocab)
-				label_ctc_len = self.ctc_len(label)
+
+				label_ctc_len = self.ctc_len(label) #label_ctc_len为ctc需要做出预测的输出总数目
 				if pad_fbank.shape[0]//8 >= label_ctc_len:			#ctc要求输入大于输出
 					wav_data_lst.append(pad_fbank)
 					label_data_lst.append(label)
+
 			pad_wav_data, input_length = self.wav_padding(wav_data_lst)
 			pad_label_data, label_length = self.label_padding(label_data_lst)
+
 			inputs = {'the_inputs': pad_wav_data,
 					'the_labels': pad_label_data,
 					'input_length': input_length,
@@ -133,7 +141,7 @@ class get_data():
 			label_batch = self.han_lst[begin:end]
 			max_len = max([len(line) for line in input_batch])
 
-			input_batch = np.array([self.pny2id(line, self.pny_vocab) + [0] * (max_len - len(line)) for line in input_batch])
+			input_batch = np.array([self.pny2id(line, self.pny_vocab) + [0] * (max_len - len(line)) for line in input_batch])#pny2id返回列表
 																											#该批中每一行以最长行为标准补0
 			label_batch = np.array([self.han2id(line, self.han_vocab) + [0] * (max_len - len(line)) for line in label_batch])
 			yield input_batch, label_batch
@@ -158,7 +166,7 @@ class get_data():
 		max_label_len = max(label_lens)
 		new_label_data_lst = np.zeros((len(label_data_lst), max_label_len))
 		for i in range(len(label_data_lst)):
-			new_label_data_lst[i][:len(label_data_lst[i])] = label_data_lst[i]
+			new_label_data_lst[i][:len(label_data_lst[i])] = label_data_lst[i]#向全0list填值
 		return new_label_data_lst, label_lens
 
 	def mk_am_vocab(self, data):
@@ -179,7 +187,7 @@ class get_data():
 					vocab.append(pny)
 		return vocab
 
-	def mk_lm_han_vocab(self, data):
+	def mk_lm_han_vocab(self, data):#id2han
 		vocab = ['<PAD>']
 		for line in tqdm(data):
 			for han in line:
@@ -193,7 +201,7 @@ class get_data():
 		for i in range(label_len - 1):		#遍历label
 			if label[i] == label[i+1]:
 				add_len += 1
-		return label_len + add_len			#计算需要预测的输出个数？
+		return label_len + add_len			#计算需要ctc预测的输出总个数
 
 
 
@@ -211,30 +219,41 @@ def compute_mfcc(file):
 def compute_fbank(file):
 	x=np.linspace(0, 400 - 1, 400, dtype = np.int64)
 	w = 0.54 - 0.46 * np.cos(2 * np.pi * (x) / (400 - 1) ) # 汉明窗
-	fs, wavsignal = wav.read(file)
+
+	fs, wavsignal = wav.read(file)#wav.read返回一个元组，fs音频的采样率，wavsignal为音频数据的numpy数组
+
 	# wav波形 加时间窗以及时移10ms
 	time_window = 25 #帧长  单位ms
+	#window_length = fs / 1000 * time_window  # 计算窗长度的公式，目前全部为400固定值
 	wav_arr = np.array(wavsignal)
-	range0_end = int(len(wavsignal)/fs*1000 - time_window) // 10 # 计算循环终止的位置，也就是最终生成的窗数；10是帧移，单位ms；fs是每秒采样点数
+
+					#len(wavsignal)/(fs/1000)是读取的wav的总毫秒数，从0开始记，所以先减一帧
+	range0_end = int(len(wavsignal)/fs*1000 - time_window) // 10 # 计算循环终止的位置，也就是最终生成的窗数；10是帧移，单位ms；fs是每秒采样点数，Hz
+
 	data_input = np.zeros((range0_end, 200), dtype = np.float) # 用于存放最终的频率特征数据
 	data_line = np.zeros((1, 400), dtype = np.float)
+
 	for i in range(0, range0_end):#遍历每一帧
 		p_start = i * 160
 		p_end = p_start + 400 			#设置为400，因为是对称的，取一半数据即200
 		data_line = wav_arr[p_start:p_end]
-		data_line = data_line * w # 加窗
+		data_line = data_line * w # 每一帧加窗
 		data_line = np.abs(fft(data_line))
-		data_input[i]=data_line[0:200] # 设置为400除以2的值（即200）是取一半数据，因为是对称的
+		data_input[i]=data_line[0:200] # 设置为400除以2的值（即200）是取一半数据，因为是频率特征对称的
 	data_input = np.log(data_input + 1) #转换为db
 	#data_input = data_input[::]
-	return data_input
+
+	return data_input    #shape=(帧数, 200)
 
 
 # word error rate------------------------------------
-def GetEditDistance(str1, str2):#编辑距离是指两个字串之间，由一个转成另一个所需的最少编辑操作次数。
+def GetEditDistance(str1, str2):#编辑距离是指两个字串之间，由一个转成另一个所需的最少编辑操作的度量
 								#许可的编辑操作包括单个字符的替换，插入，删除
 	leven_cost = 0
 	s = difflib.SequenceMatcher(None, str1, str2)#	None处为丢弃函数，此处设置不丢弃。SequenceMatcher是构造函数，主要创建任何类型序列的比较对象
+
+	'''get_opcodes函数每执行一次返回5个元素的元组，元组描述了从a序列变成b序列所经历的步骤。5个元素的元组表示为(tag, i1, i2, j1, j2)，其中tag表示动作，
+	   i1,i2分别表示序列a的开始和结束位置，j1，j2表示序列b的开始和结束位置。'''
 	for tag, i1, i2, j1, j2 in s.get_opcodes():
 		if tag == 'replace':					#a[i1:i2] should be replaced by b[j1:j2]
 			leven_cost += max(i2-i1, j2-j1)
@@ -249,7 +268,9 @@ def decode_ctc(num_result, num2word):
 	result = num_result[:, :, :]#取前三个维度
 	in_len = np.zeros((1), dtype = np.int32)
 	in_len[0] = result.shape[1]
-	r = K.ctc_decode(result, in_len, greedy = True, beam_width=10, top_paths=1)#集束搜索，result是y_pred，top_paths=1表示最终返回一条最可能的路径
+
+	# tf.keras.backend.ctc_decode( y_pred, input_length, greedy, beam_width，top_paths)
+	r = K.ctc_decode(result, in_len, greedy = True, beam_width=10, top_paths=1) #集束搜索，result是y_pred，top_paths=1表示最终返回一条最可能的路径
 																				#ctc_decode返回将已解码序列作为一个元素的列表
 	r1 = K.get_value(r[0][0])				#get_value输入变量，返回一个数组
 	r1 = r1[0]
