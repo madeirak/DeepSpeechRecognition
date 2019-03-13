@@ -1,3 +1,11 @@
+#### （对原作者代码详尽备注，并添加语言模型、声学模型、以及整体测试的代码。实现使用自己录的音频的所有模型的测试。）
+
+
+
+
+
+
+
 # 基于深度学习的中文语音识别系统
 
 [![GPL-3.0 Licensed](https://img.shields.io/badge/License-GPL3.0-blue.svg?style=flat)](https://opensource.org/licenses/GPL-3.0) [![TensorFlow Version](https://img.shields.io/badge/Tensorflow-1.7+-blue.svg)](https://www.tensorflow.org/) [![Keras Version](https://img.shields.io/badge/Keras-2.0+-blue.svg)](https://keras.io/) [![Python Version](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
