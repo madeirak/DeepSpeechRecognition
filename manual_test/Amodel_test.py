@@ -4,7 +4,6 @@ from scipy.fftpack import fft
 from utils import decode_ctc
 import os
 
-
 from utils import get_data, data_hparams
 
 #data_args = data_hparams()
