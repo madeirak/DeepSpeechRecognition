@@ -102,7 +102,7 @@ class get_data():
 			end = begin + self.batch_size
 			sub_list = shuffle_list[begin:end]
 
-			for index in sub_list:
+			for index in sub_list:#将wav_lst中的元素打乱训练
 				fbank = compute_fbank(self.data_path + self.wav_lst[index])#fbank.shape = (帧数，200)
 
 				pad_fbank = np.zeros((fbank.shape[0]//8*8+8, fbank.shape[1]))  #“//”整除，向下取整，“//”与“*”优先级相同，从左往右计算
@@ -234,7 +234,7 @@ def compute_fbank(file):
 	data_line = np.zeros((1, 400), dtype = np.float)
 
 	for i in range(0, range0_end):#遍历每一帧
-		p_start = i * 160#?
+		p_start = i * 160
 		p_end = p_start + 400 			#设置为400，因为是对称的，取一半数据即200
 		data_line = wav_arr[p_start:p_end]
 		data_line = data_line * w # 每一帧加窗
@@ -243,7 +243,7 @@ def compute_fbank(file):
 	data_input = np.log(data_input + 1) #转换为db
 	#data_input = data_input[::]
 
-	return data_input    #shape=(帧数, 采样点=200)
+	return data_input    #shape=(帧数, 200)
 
 
 # word error rate------------------------------------
