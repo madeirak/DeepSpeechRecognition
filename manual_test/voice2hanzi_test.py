@@ -4,14 +4,14 @@ from scipy.fftpack import fft
 from utils import decode_ctc
 import tensorflow as tf
 import os
-
+from utils import compute_fbank
 
 from utils import get_data, data_hparams
 data_args = data_hparams()
 train_data = get_data(data_args)
 
 
-'''将测试文件放于data/'''
+'''将测试音频文件放于data/'''
 
 # 1.声学模型-----------------------------------
 from model_speech.cnn_ctc import Am, am_hparams
@@ -39,33 +39,9 @@ with sess.as_default():#创建默认会话
     saver.restore(sess, latest)#restore(sess,save_path)，需要启动图表的会话
                                # 该save_path参数通常是先前从save()调用或调用返回的值latest_checkpoint()
 
-# 获取信号的时频图
-def compute_fbank(file):
-	x=np.linspace(0, 400 - 1, 400, dtype = np.int64)
-	w = 0.54 - 0.46 * np.cos(2 * np.pi * (x) / (400 - 1) ) # 汉明窗
-	fs, wavsignal = wav.read(file)
-	# wav波形 加时间窗以及时移10ms
-	time_window = 25 # 单位ms
-	window_length = fs / 1000 * time_window # 计算窗长度的公式，目前全部为400固定值
-	wav_arr = np.array(wavsignal)
-	wav_length = len(wavsignal)
-	range0_end = int(len(wavsignal)/fs*1000 - time_window) // 10 # 计算循环终止的位置，也就是最终生成的窗数
-	data_input = np.zeros((range0_end, 200), dtype = np.float) # 用于存放最终的频率特征数据
-	data_line = np.zeros((1, 400), dtype = np.float)
-	for i in range(0, range0_end):
-		p_start = i * 160
-		p_end = p_start + 400
-		data_line = wav_arr[p_start:p_end]
-		data_line = data_line * w # 加窗
-		data_line = np.abs(fft(data_line))
-		data_input[i]=data_line[0:200] # 设置为400除以2的值（即200）是取一半数据，因为是对称的
-	data_input = np.log(data_input + 1)
-	#data_input = data_input[::]
-	return data_input
-
 
 import matplotlib.pyplot as plt
-filepath = 'data/test.wav'
+filepath = 'data/A2_1.wav'
 
 _, wavsignal = wav.read(filepath)
 #plt.plot(wavsignal)
@@ -107,5 +83,5 @@ with sess.as_default():
     x = x.reshape(1, -1)
     preds = sess.run(lm.preds, {lm.x: x})
     got = ''.join(train_data.han_vocab[idx] for idx in preds[0])  #id2hanzi
-    print(got)
+    print('汉字结果：',got)
 sess.close()

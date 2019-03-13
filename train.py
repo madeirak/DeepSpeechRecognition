@@ -14,7 +14,7 @@ data_args.prime = True
 data_args.stcmd = True
 data_args.batch_size = 4
 data_args.data_length = 10
-data_args.data_length = None #作者做实验时写小一些看效果用的，正常使用设为None，用于截取部分的lst数据
+#data_args.data_length = None #作者做实验时写小一些看效果用的，正常使用设为None，用于截取部分的lst数据
 #data_args.shuffle = True
 train_data = get_data(data_args)
 

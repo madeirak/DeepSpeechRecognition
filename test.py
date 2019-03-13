@@ -55,7 +55,8 @@ for i in range(10):
     print('\n the ', i, 'th example.')
     # 载入训练好的模型，并进行识别
     inputs, _ = next(am_batch)#yield inputs, outputs
-    x = inputs['the_inputs']#即x = pad_wav_data
+    x = inputs['the_inputs']#即x = pad_wav_data  x.shape=(1,1080,200,1)
+
     y = test_data.pny_lst[i]
     result = am.model.predict(x, steps=1)#steps预测周期结束前的总步骤数(样品批次)，predict返回numpy数组类型的预测
 
@@ -78,3 +79,4 @@ for i in range(10):
         word_num += len(label)
 print('词错误率：', word_error_num / word_num)
 sess.close()
+
