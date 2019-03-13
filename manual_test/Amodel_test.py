@@ -6,9 +6,14 @@ import os
 
 from utils import get_data, data_hparams
 
+
 #data_args = data_hparams()
 
+
 # 0.准备验证所需数据------------------------------
+
+from utils import get_data, data_hparams
+
 data_args = data_hparams()
 data_args.data_type = 'dev'
 data_args.data_path = '../dataset/'
