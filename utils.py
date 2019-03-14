@@ -269,9 +269,11 @@ def decode_ctc(num_result, num2word):
 	in_len = np.zeros((1), dtype = np.int32)
 	in_len[0] = result.shape[1]
 
+
 	# tf.keras.backend.ctc_decode( y_pred, input_length, greedy, beam_width，top_paths)
+	'''ctc_decode()返回一个二元组，第一项是一个一元素列表,其中包含了解码序列;第二项是(top_paths, )的张量，包含每个解码序列的log概率'''
 	r = K.ctc_decode(result, in_len, greedy = True, beam_width=10, top_paths=1) #集束搜索，result是y_pred，top_paths=1表示最终返回一条最可能的路径
-																				#ctc_decode返回将已解码序列作为一个元素的列表
+
 	r1 = K.get_value(r[0][0])				#get_value输入变量，返回一个数组
 	r1 = r1[0]
 	text = []

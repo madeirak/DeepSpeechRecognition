@@ -11,7 +11,7 @@ data_args = data_hparams()
 train_data = get_data(data_args)
 
 
-'''将测试文件放于data/'''
+'''将测试文件放于manual_test/data/'''
 
 # 1.声学模型-----------------------------------
 from model_speech.cnn_ctc import Am, am_hparams
@@ -76,7 +76,6 @@ print('拼音结果：', text)
 
 # 3.手动测试语言模型------------------------------------
 with sess.as_default():
-    #line = input('输入测试拼音: ')
     line = text
     line = line.strip('\n').split(' ')
     x = np.array([train_data.pny_vocab.index(pny) for pny in line])#pny2id
