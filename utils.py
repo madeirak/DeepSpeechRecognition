@@ -227,8 +227,8 @@ def compute_fbank(file):
 	#window_length = fs / 1000 * time_window  # 计算窗长度的公式，目前全部为400固定值
 	wav_arr = np.array(wavsignal)
 
-					#len(wavsignal)/(fs/1000)是读取的wav的总毫秒数，从0开始记，所以先减一帧
-	range0_end = int(len(wavsignal)/fs*1000 - time_window) // 10 # 计算循环终止的位置，也就是最终生成的窗数；10是帧移，单位ms；fs是每秒采样点数，Hz
+					#len(wavsignal)/(fs/1000)是读取的wav的总毫秒数，从0开始记，所以先减一帧                  ；10是帧移，单位ms；fs是每秒采样点数，Hz
+	range0_end = int(len(wavsignal)/fs*1000 - time_window) // 10 +1 # 计算循环终止的位置，也就是最终生成的窗数
 
 	data_input = np.zeros((range0_end, 200), dtype = np.float) # 用于存放最终的频率特征数据
 	data_line = np.zeros((1, 400), dtype = np.float)
