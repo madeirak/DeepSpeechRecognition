@@ -15,6 +15,7 @@ def data_hparams():
         data_type = 'train',
         #data_path = 'e:/data/',
 		data_path='G:/yinpin_data/',
+		self_wav = False,
         thchs30 = True,
         aishell = False,
 		prime = False,
@@ -33,6 +34,7 @@ class get_data():
 		self.data_path = args.data_path
 		self.thchs30 = args.thchs30
 		self.aishell = args.aishell
+		self.self_wav = args.self_wav
 		self.prime = args.prime
 		self.stcmd = args.stcmd
 		self.data_length = args.data_length
@@ -44,6 +46,8 @@ class get_data():
 		print('get source list...')
 		read_files = []
 		if self.data_type == 'train':
+			if self.self_wav == True:
+				read_files.append('self_wav_train.txt')
 			if self.thchs30 == True:
 				read_files.append('thchs_train.txt')
 			if self.aishell == True:
@@ -53,11 +57,15 @@ class get_data():
 			if self.stcmd == True:
 				read_files.append('stcmd.txt')
 		elif self.data_type == 'dev':						#development set    验证集dev
+			if self.self_wav == True:
+				read_files.append('self_wav_dev.txt')
 			if self.thchs30 == True:
 				read_files.append('thchs_dev.txt')
 			if self.aishell == True:
 				read_files.append('aishell_dev.txt')
 		elif self.data_type == 'test':
+			if self.self_wav == True:
+				read_files.append('self_wav_test.txt')
 			if self.thchs30 == True:
 				read_files.append('thchs_test.txt')
 			if self.aishell == True:
