@@ -4,6 +4,7 @@ from utils import get_data, data_hparams
 from keras.callbacks import ModelCheckpoint
 
 
+
 # 0.准备训练所需数据------------------------------
 data_args = data_hparams()
 data_args.data_type = 'train'
