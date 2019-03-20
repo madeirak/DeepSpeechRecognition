@@ -1,20 +1,20 @@
-self_wav/1_.wav	wo3 zhun3 bei4 hao3 le5	ÎÒ×¼±¸ºÃÁË
-self_wav/2_.wav	shao1 deng3 wo3 yi2 xia4	ÉÔµÈÎÒÒ»ÏÂ
-self_wav/3_.wav	zhong1 guo2 shi4 yi2 ge4 ya4 zhou1 guo2 jia1	ÖĞ¹úÊÇÒ»¸öÑÇÖŞ¹ú¼Ò
-self_wav/4_.wav	mei3 guo2 you3 hen3 duo1 cheng2 shi4	ÃÀ¹úÓĞºÜ¶à³ÇÊĞ
-self_wav/5_.wav	wang3 luo4 dui4 she4 hui4 zao4 cheng2 le5 ju4 da4 de5 ying3 xiang3	ÍøÂç¶ÔÉç»áÔì³ÉÁË¾Ş´óµÄÓ°Ïì
-self_wav/6_.wav	ren2 min2 sheng1 huo2 shui3 ping2 ri4 yi4 ti2 gao1	ÈËÃñÉú»îË®Æ½ÈÕÒæÌá¸ß
-self_wav/7_.wav	zhi4 neng2 chan2 pin3 zou3 jin4 le5 ren2 men5 de5 sheng1 huo2	ÖÇÄÜ²úÆ·×ß½øÁËÈËÃÇµÄÉú»î
-self_wav/8_.wav	shi4 liang4 yun4 dong4 you3 yi4 shen1 ti3 jian4 kang1	ÊÊÁ¿ÔË¶¯ÓĞÒæÉíÌå½¡¿µ
-self_wav/9._wav	zhong1 chao1 lian2 sai4 ge4 dui4 de5 wai4 yuan2 wu2 yi2 shi4 da4 tui3	ÖĞ³¬ÁªÈü¸÷¶ÓµÄÍâÔ®ÎŞÒÉÊÇ´óÍÈ
-self_wav/10_.wav	jin1 tian1 tian1 qi5 fang4 qing2 le5	½ñÌìÌìÆø·ÅÇçÁË
-self_wav/11_.wav	zui4 jin4 de5 dian4 ying3 yuan4 shi4 na3 ge4	×î½üµÄµçÓ°ÔºÊÇÄÄ¸ö
-self_wav/12_.wav	fu4 jin4 you3 shen3 me5 hao3 chi1 de5 can1 guan3  ma5	¸½½üÓĞÊ²Ã´ºÃ³ÔµÄ²Í¹İÂğ
-self_wav/13_.wav	bu2 dao4 chang2 cheng2 fei1 hao3 han4	²»µ½³¤³Ç·ÇºÃºº
-self_wav/14_.wav	bang1 wo3 jiao4 yi2 ge5 chu1 zu1 che1	°ïÎÒ½ĞÒ»¸ö³ö×â³µ
-self_wav/15_.wav	bang1 wo3 mai3 yi1 zhang1 gao1 tie3 piao4	°ïÎÒÂòÒ»ÕÅ¸ßÌúÆ±
-self_wav/16_.wav	xian3 shi4 ming2 tian1 de5 ri4 cheng2 an1 pai2	ÏÔÊ¾Ã÷ÌìµÄÈÕ³Ì°²ÅÅ
-self_wav/17_.wav	ming2 zao3 de5 ou1 guan4 bi3 sai4 shi4 ji3 dian3	Ã÷ÔçµÄÅ·¹Ú±ÈÈüÊÇ¼¸µã
-self_wav/18_.wav	zhong1 guo2 de5 gao1 su4 jiao1 tong1 wang3 fa1 zhan3 xun4 su4	ÖĞ¹úµÄ¸ßËÙ½»Í¨Íù·¢Õ¹Ñ¸ËÙ
-self_wav/19_.wav	shou3 ji1 xin1 wen2 cheng2 wei2 yi4 zhong3 kuai4 can1 wen2 hua4	ÊÖ»úĞÂÎÅ³ÉÎªÒ»ÖÖ¿ì²ÍÎÄ»¯
-self_wav/20_.wav	zhong1 guo2 you3 hen3 duo1 pin3 pai2 yi3 jing1 zou3 xiang4 quan2 qiu2	ÖĞ¹úÓĞºÜ¶àÆ·ÅÆÒÑ¾­×ßÏòÈ«Çò
+ï»¿self_wav/1_.wav	wo3 zhun3 bei4 hao3 le	æˆ‘å‡†å¤‡å¥½äº†
+self_wav/2_.wav	shao1 deng3 wo3 yi2 xia4	ç¨ç­‰æˆ‘ä¸€ä¸‹
+self_wav/3_.wav	zhong1 guo2 shi4 yi2 ge4 ya4 zhou1 guo2 jia1	ä¸­å›½æ˜¯ä¸€ä¸ªäºšæ´²å›½å®¶
+self_wav/4_.wav	mei3 guo2 you3 hen3 duo1 cheng2 shi4	ç¾å›½æœ‰å¾ˆå¤šåŸå¸‚
+self_wav/5_.wav	wang3 luo4 dui4 she4 hui4 zao4 cheng2 le5 ju4 da4 de5 ying3 xiang3	ç½‘ç»œå¯¹ç¤¾ä¼šé€ æˆäº†å·¨å¤§çš„å½±å“
+self_wav/6_.wav	ren2 min2 sheng1 huo2 shui3 ping2 ri4 yi4 ti2 gao1	äººæ°‘ç”Ÿæ´»æ°´å¹³æ—¥ç›Šæé«˜
+self_wav/7_.wav	zhi4 neng2 chan2 pin3 zou3 jin4 le5 ren2 men5 de5 sheng1 huo2	æ™ºèƒ½äº§å“èµ°è¿›äº†äººä»¬çš„ç”Ÿæ´»
+self_wav/8_.wav	shi4 liang4 yun4 dong4 you3 yi4 shen1 ti3 jian4 kang1	é€‚é‡è¿åŠ¨æœ‰ç›Šèº«ä½“å¥åº·
+self_wav/9_.wav	zhong1 chao1 lian2 sai4 ge4 dui4 de5 wai4 yuan2 wu2 yi2 shi4 da4 tui3	ä¸­è¶…è”èµ›å„é˜Ÿçš„å¤–æ´æ— ç–‘æ˜¯å¤§è…¿
+self_wav/10_.wav	jin1 tian1 tian1 qi5 fang4 qing2 le5	ä»Šå¤©å¤©æ°”æ”¾æ™´äº†
+self_wav/11_.wav	zui4 jin4 de5 dian4 ying3 yuan4 shi4 na3 ge4	æœ€è¿‘çš„ç”µå½±é™¢æ˜¯å“ªä¸ª
+self_wav/12_.wav	fu4 jin4 you3 shen3 me5 hao3 chi1 de5 can1 guan3  ma5	é™„è¿‘æœ‰ä»€ä¹ˆå¥½åƒçš„é¤é¦†å—
+self_wav/13_.wav	bu2 dao4 chang2 cheng2 fei1 hao3 han4	ä¸åˆ°é•¿åŸéå¥½æ±‰
+self_wav/14_.wav	bang1 wo3 jiao4 yi2 ge5 chu1 zu1 che1	å¸®æˆ‘å«ä¸€ä¸ªå‡ºç§Ÿè½¦
+self_wav/15_.wav	bang1 wo3 mai3 yi1 zhang1 gao1 tie3 piao4	å¸®æˆ‘ä¹°ä¸€å¼ é«˜é“ç¥¨
+self_wav/16_.wav	xian3 shi4 ming2 tian1 de5 ri4 cheng2 an1 pai2	æ˜¾ç¤ºæ˜å¤©çš„æ—¥ç¨‹å®‰æ’
+self_wav/17_.wav	ming2 zao3 de5 ou1 guan4 bi3 sai4 shi4 ji3 dian3	æ˜æ—©çš„æ¬§å† æ¯”èµ›æ˜¯å‡ ç‚¹
+self_wav/18_.wav	zhong1 guo2 de5 gao1 su4 jiao1 tong1 wang3 fa1 zhan3 xun4 su4	ä¸­å›½çš„é«˜é€Ÿäº¤é€šå¾€å‘å±•è¿…é€Ÿ
+self_wav/19_.wav	shou3 ji1 xin1 wen2 cheng2 wei2 yi4 zhong3 kuai4 can1 wen2 hua4	æ‰‹æœºæ–°é—»æˆä¸ºä¸€ç§å¿«é¤æ–‡åŒ–
+self_wav/20_.wav	zhong1 guo2 you3 hen3 duo1 pin3 pai2 yi3 jing1 zou3 xiang4 quan2 qiu2	ä¸­å›½æœ‰å¾ˆå¤šå“ç‰Œå·²ç»èµ°å‘å…¨çƒ

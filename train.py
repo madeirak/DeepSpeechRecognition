@@ -4,11 +4,10 @@ from utils import get_data, data_hparams
 from keras.callbacks import ModelCheckpoint
 
 
-
 # 0.准备训练所需数据------------------------------
 data_args = data_hparams()
 data_args.data_type = 'train'
-data_args.data_path = '../dataset/'
+#data_args.data_path = '../dataset/'
 data_args.thchs30 = True
 data_args.aishell = True
 data_args.prime = True
@@ -22,7 +21,7 @@ train_data = get_data(data_args)
 # 0.准备验证所需数据------------------------------
 data_args = data_hparams()
 data_args.data_type = 'dev'
-data_args.data_path = '../dataset/'
+#data_args.data_path = '../dataset/'
 data_args.thchs30 = True
 data_args.aishell = True
 data_args.prime = False

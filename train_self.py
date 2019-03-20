@@ -7,7 +7,7 @@ from keras.callbacks import ModelCheckpoint
 # 0.准备训练所需数据------------------------------
 data_args = data_hparams()
 data_args.data_type = 'train'
-data_args.data_path = '../dataset/'
+#data_args.data_path = '../dataset/'
 data_args.self_wav = True
 data_args.thchs30 = False
 data_args.aishell = False
@@ -19,26 +19,27 @@ data_args.data_length = 20  #取self_wav的20条wav训练
 #data_args.shuffle = True
 train_data = get_data(data_args)
 
-'''
+
 # 0.准备验证所需数据------------------------------
 data_args = data_hparams()
 data_args.data_type = 'dev'
-data_args.data_path = '../dataset/'
-data_args.thchs30 = True
+#data_args.data_path = '../dataset/'
+data_args.self_wav = True
+data_args.thchs30 = False
 data_args.aishell = False
 data_args.prime = False
 data_args.stcmd = False
 data_args.batch_size = 4
 #data_args.data_length = None #作者做实验时写小一些看效果用的，正常使用设为None
-data_args.data_length = 20
+data_args.data_length = 5
 data_args.shuffle = True
 dev_data = get_data(data_args)
-'''
+
 
 # 1.声学模型训练-----------------------------------
 from model_speech.cnn_ctc import Am, am_hparams
 am_args = am_hparams()
-am_args.vocab_size = len(train_data.am_vocab)
+am_args.MS_OUTPUT_SIZE = len(train_data.am_vocab)
 am_args.gpu_nums = 1
 am_args.lr = 0.0008
 am_args.is_training = True
@@ -61,7 +62,7 @@ ckpt = "model_self_{epoch:02d}-{val_acc:.2f}.hdf5"#字符串中包含格式化�
                             #monitor='val_acc'监测验证准确率
                             #verbose详细模式，0为不打印输出信息，1位打印输出
                             #save_weights_only=False，不只保存权重而是整个模型
-checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_loss',
+checkpoint = ModelCheckpoint(os.path.join('.\checkpoint', ckpt), monitor='val_accuracy',
                              save_weights_only=False, verbose=1, save_best_only=True)
 
 
@@ -74,15 +75,13 @@ checkpoint = ModelCheckpoint(os.path.join('./checkpoint', ckpt), monitor='val_lo
 #     workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=200)
 
 batch = train_data.get_am_batch()
-
-'''
 dev_batch = dev_data.get_am_batch()
-'''
 
-am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=10, callbacks=[checkpoint],
-                           workers=1, use_multiprocessing=False)#, validation_data=dev_batch, validation_steps=200
 
- #（训练数据生成器实例，一个epoch有几个batch(batch_num)，epoch，回调函数，最大进程数，不用多线程，验证数据生成器，设置验证多少次数据后取平均值作为此epoch训练后的效果）
+am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=30, callbacks=[checkpoint],
+                           workers=1, use_multiprocessing=False, validation_data=dev_batch, validation_steps=5)
+
+ #（训练数据生成器实例，一个epoch有几个batch(batch_num)，epoch，回调函数，最大进程数，不用多线程，验证数据生成器，validation_steps:设置验证多少次数据后取平均值作为此epoch训练后的效果）
 
 am.ctc_model.save_weights('logs_am/model_self.h5')#保存所有层的权重，“h5”表示HDF5格式保存
                                             #默认情况下，会以 TensorFlow 检查点文件格式保存模型的权重。权重也可以另存为 Keras HDF5 格式

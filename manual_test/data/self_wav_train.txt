@@ -1,0 +1,20 @@
+﻿self_wav/1_.wav	wo3 zhun3 bei4 hao3 le	我准备好了
+self_wav/2_.wav	shao1 deng3 wo3 yi2 xia4	稍等我一下
+self_wav/3_.wav	zhong1 guo2 shi4 yi2 ge4 ya4 zhou1 guo2 jia1	中国是一个亚洲国家
+self_wav/4_.wav	mei3 guo2 you3 hen3 duo1 cheng2 shi4	美国有很多城市
+self_wav/5_.wav	wang3 luo4 dui4 she4 hui4 zao4 cheng2 le5 ju4 da4 de5 ying3 xiang3	网络对社会造成了巨大的影响
+self_wav/6_.wav	ren2 min2 sheng1 huo2 shui3 ping2 ri4 yi4 ti2 gao1	人民生活水平日益提高
+self_wav/7_.wav	zhi4 neng2 chan2 pin3 zou3 jin4 le5 ren2 men5 de5 sheng1 huo2	智能产品走进了人们的生活
+self_wav/8_.wav	shi4 liang4 yun4 dong4 you3 yi4 shen1 ti3 jian4 kang1	适量运动有益身体健康
+self_wav/9_.wav	zhong1 chao1 lian2 sai4 ge4 dui4 de5 wai4 yuan2 wu2 yi2 shi4 da4 tui3	中超联赛各队的外援无疑是大腿
+self_wav/10_.wav	jin1 tian1 tian1 qi5 fang4 qing2 le5	今天天气放晴了
+self_wav/11_.wav	zui4 jin4 de5 dian4 ying3 yuan4 shi4 na3 ge4	最近的电影院是哪个
+self_wav/12_.wav	fu4 jin4 you3 shen3 me5 hao3 chi1 de5 can1 guan3  ma5	附近有什么好吃的餐馆吗
+self_wav/13_.wav	bu2 dao4 chang2 cheng2 fei1 hao3 han4	不到长城非好汉
+self_wav/14_.wav	bang1 wo3 jiao4 yi2 ge5 chu1 zu1 che1	帮我叫一个出租车
+self_wav/15_.wav	bang1 wo3 mai3 yi1 zhang1 gao1 tie3 piao4	帮我买一张高铁票
+self_wav/16_.wav	xian3 shi4 ming2 tian1 de5 ri4 cheng2 an1 pai2	显示明天的日程安排
+self_wav/17_.wav	ming2 zao3 de5 ou1 guan4 bi3 sai4 shi4 ji3 dian3	明早的欧冠比赛是几点
+self_wav/18_.wav	zhong1 guo2 de5 gao1 su4 jiao1 tong1 wang3 fa1 zhan3 xun4 su4	中国的高速交通往发展迅速
+self_wav/19_.wav	shou3 ji1 xin1 wen2 cheng2 wei2 yi4 zhong3 kuai4 can1 wen2 hua4	手机新闻成为一种快餐文化
+self_wav/20_.wav	zhong1 guo2 you3 hen3 duo1 pin3 pai2 yi3 jing1 zou3 xiang4 quan2 qiu2	中国有很多品牌已经走向全球

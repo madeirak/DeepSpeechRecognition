@@ -11,7 +11,7 @@ import tensorflow as tf
 def am_hparams():
     params = tf.contrib.training.HParams(
         # vocab
-        vocab_size = 50,
+        MS_OUTPUT_SIZE=127,
         lr = 0.0008,
         gpu_nums = 1,
         is_training = True)
@@ -23,7 +23,7 @@ def am_hparams():
 class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向传播来构建完全可自定义的模型。
     """docstring for Amodel."""
     def __init__(self, args):#将类实例的属性应用到后续的层创建中
-        self.vocab_size = args.vocab_size
+        self.MS_OUTPUT_SIZE = args.MS_OUTPUT_SIZE
         self.gpu_nums = args.gpu_nums
         self.lr = args.lr
         self.is_training = args.is_training
@@ -46,7 +46,7 @@ class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向�
         self.h6 = Dropout(0.2)(self.h6)
         self.h7 = dense(256)(self.h6)
         self.h7 = Dropout(0.2)(self.h7)
-        self.outputs = dense(self.vocab_size, activation='softmax')(self.h7)
+        self.outputs = dense(self.MS_OUTPUT_SIZE, activation='softmax')(self.h7)
         self.model = Model(inputs=self.inputs, outputs=self.outputs)#实例化上述自定义模型
         self.model.summary()
 
@@ -67,7 +67,7 @@ class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向�
         if self.gpu_nums > 1:#多GPU
             self.ctc_model=multi_gpu_model(self.ctc_model,gpus=self.gpu_nums)
 
-        self.ctc_model.compile(loss={'ctc': lambda y_true, output: output}, optimizer=opt)#单GPU
+        self.ctc_model.compile(loss={'ctc': lambda y_true, output: output}, optimizer=opt,metrics = ['accuracy'])#单GPU
                                                                                     #complie函数编译模型model以供训练，编译时指明loss和优化器
                                                                                     #y_true为真实数据标签（对应于上面的y_pred输出的预测值）                                                                                  #
 

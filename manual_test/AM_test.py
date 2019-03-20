@@ -7,6 +7,12 @@ import os
 # 0.准备解码所需字典
 from utils import get_data, data_hparams
 data_args = data_hparams()
+data_args.data_type = 'train'
+data_args.self_wav = True
+data_args.thchs30 = False
+data_args.aishell = False
+data_args.prime = False
+data_args.stcmd = False
 train_data = get_data(data_args)
 
 # 1.声学模型-----------------------------------
@@ -20,11 +26,11 @@ am_args = am_hparams()
 am_args.vocab_size = len(train_data.am_vocab)
 am = Am(am_args)
 print('loading acoustic model...')
-am.ctc_model.load_weights('G:/DeepSpeechRecognition/logs_am/model.h5')#从绝对路径的检查点恢复权重数据
+am.ctc_model.load_weights('G:/DeepSpeechRecognition/logs_am/model_self.h5')#从绝对路径的检查点恢复权重数据
 
 
 import matplotlib.pyplot as plt
-filepath = 'data/A11_1.wav'
+filepath = 'data/5_.wav'
 
 _, wavsignal = wav.read(filepath)
 #plt.plot(wavsignal)

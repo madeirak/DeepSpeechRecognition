@@ -1,0 +1,5 @@
+﻿self_wav/16_.wav	xian3 shi4 ming2 tian1 de5 ri4 cheng2 an1 pai2	显示明天的日程安排
+self_wav/17_.wav	ming2 zao3 de5 ou1 guan4 bi3 sai4 shi4 ji3 dian3	明早的欧冠比赛是几点
+self_wav/18_.wav	zhong1 guo2 de5 gao1 su4 jiao1 tong1 wang3 fa1 zhan3 xun4 su4	中国的高速交通往发展迅速
+self_wav/19_.wav	shou3 ji1 xin1 wen2 cheng2 wei2 yi4 zhong3 kuai4 can1 wen2 hua4	手机新闻成为一种快餐文化
+self_wav/20_.wav	zhong1 guo2 you3 hen3 duo1 pin3 pai2 yi3 jing1 zou3 xiang4 quan2 qiu2	中国有很多品牌已经走向全球
