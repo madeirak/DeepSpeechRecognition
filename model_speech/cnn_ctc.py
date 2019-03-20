@@ -68,9 +68,10 @@ class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向�
             self.ctc_model=multi_gpu_model(self.ctc_model,gpus=self.gpu_nums)
 
         self.ctc_model.compile(loss={'ctc': lambda y_true, output: output}, optimizer=opt,metrics = ['accuracy'])#单GPU
-                                                                                    #complie函数编译模型model以供训练，编译时指明loss和优化器
-                                                                                    #y_true为真实数据标签（对应于上面的y_pred输出的预测值）                                                                                  #
-
+                                                                        #编译时指明loss和优化器
+                                                                        #直接将loss设置为y_pred（因为模型的输出就是loss，所以y_pred
+                                                                        #就是loss），无视y_true，训练的时候，y_true随便扔一个符合形状的数组进去就行了                                                                                  #
+                                                                        #lambda [arg1 ,arg2,...] : expression
 
 
 
