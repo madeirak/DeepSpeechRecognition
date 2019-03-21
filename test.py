@@ -78,3 +78,4 @@ for i in range(10):
         word_num += len(label)
 print('词错误率：', word_error_num / word_num)
 sess.close()
+
