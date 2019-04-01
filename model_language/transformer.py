@@ -370,8 +370,8 @@ class Lm():
                                                     is_training=self.is_training,
                                                     causality=False)
                                 
-            ### Feed Forward
-            self.outputs = feedforward(self.enc, num_units=[4*self.hidden_units, self.hidden_units])
+                    ### Feed Forward
+                    self.outputs = feedforward(self.enc, num_units=[4*self.hidden_units, self.hidden_units])
 
 
 

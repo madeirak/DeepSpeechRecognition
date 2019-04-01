@@ -35,7 +35,7 @@ data_args.data_length = 5
 data_args.shuffle = True
 dev_data = get_data(data_args)
 
-
+'''
 # 1.声学模型训练-----------------------------------
 from model_speech.cnn_ctc import Am, am_hparams
 am_args = am_hparams()
@@ -85,8 +85,9 @@ am.ctc_model.fit_generator(batch, steps_per_epoch=batch_num, epochs=30, callback
 
 am.ctc_model.save_weights('logs_am/model_self.h5')#保存所有层的权重，“h5”表示HDF5格式保存
                                             #默认情况下，会以 TensorFlow 检查点文件格式保存模型的权重。权重也可以另存为 Keras HDF5 格式
-
 '''
+
+batch_num = len(train_data.wav_lst) // train_data.batch_size
 # 2.语言模型训练-------------------------------------------
 from model_language.transformer import Lm, lm_hparams
 lm_args = lm_hparams()
@@ -111,14 +112,14 @@ with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。�
     merged = tf.summary.merge_all()#将之前创建的所有总结节点（tf.summary.scalar），合并为一个操作，方便之后运行生成汇总数据
     sess.run(tf.global_variables_initializer())#初始化图中的所有变量（可训练参数）
     add_num = 0
-    if os.path.exists('logs_lm/checkpoint'):
+    if os.path.exists('logs_lm/self/checkpoint'):
         print('loading language model...')
-        latest = tf.train.latest_checkpoint('logs_lm')#查找最新保存的检查点文件的文件名，latest_checkpoint(checkpoint_dir)
+        latest = tf.train.latest_checkpoint('logs_lm/self')#查找最新保存的检查点文件的文件名，latest_checkpoint(checkpoint_dir)
         add_num = int(latest.split('_')[-1])#分隔后保存为列表，取最后一个
         saver.restore(sess, latest)#restore(sess,save_path)，需要启动图表的会话。要恢复的变量不必初始化，因为恢复本身就是一种初始化变量的方法。
                                    #该save_path参数通常是先前从save()调用或调用返回的值 latest_checkpoint()
 
-    writer = tf.summary.FileWriter('logs_lm/tensorboard', tf.get_default_graph())#FileWriter（logdir,graph）
+    writer = tf.summary.FileWriter('logs_lm/self/tensorboard', tf.get_default_graph())#FileWriter（logdir,graph）
                                                                                  #所有事件都会写到logdir所指的目录下
                                                                                  #接收到Graph对象，则会将图与张量形状信息一起可视化
 
@@ -139,7 +140,7 @@ with tf.Session(graph=lm.graph) as sess:#为指定图创建会话对象sess。�
                 writer.add_summary(rs, k * batch_num + i)#训练时添加总结
         print('epochs', k+1, ': average loss = ', total_loss/batch_num)
 
-    saver.save(sess, 'logs_lm/model_%d' % (epochs + add_num))#将图中训练后的变量保存到检查点文件中
+    saver.save(sess, 'logs_lm/self/model_%d' % (epochs + add_num))#将图中训练后的变量保存到检查点文件中
     writer.close()
-'''
+
 

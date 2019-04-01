@@ -8,6 +8,11 @@ import os
 
 from utils import get_data, data_hparams
 data_args = data_hparams()
+data_args.self_wav= False
+data_args.thchs30 = True
+data_args.aishell = False
+data_args.prime = False
+data_args.stcmd = False
 train_data = get_data(data_args)
 
 

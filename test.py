@@ -71,6 +71,7 @@ for i in range(10):
         x = x.reshape(1, -1)#排成一行
         preds = sess.run(lm.preds, {lm.x: x})
         label = test_data.han_lst[i]
+        #print(preds)
         got = ''.join(train_data.han_vocab[idx] for idx in preds[0])#num2hanzi
         print('原文汉字：', label)
         print('识别结果：', got)
