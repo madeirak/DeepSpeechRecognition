@@ -5,7 +5,7 @@ import tensorflow as tf
 import scipy.io.wavfile as wav
 from tqdm import tqdm
 from scipy.fftpack import fft
-from python_speech_features import mfcc
+#from python_speech_features import mfcc
 from random import shuffle
 from keras import backend as K
 
@@ -108,7 +108,7 @@ class get_data():
                     label = self.pny2id(self.pny_lst[index], self.am_vocab)
 
                     label_ctc_len = self.ctc_len(label) #label:一句的label  ctc_len:ctc输出长度
-                    if pad_fbank.shape[0] // 8 >= label_ctc_len: #token_num > ctc_len  ？？？ add_num
+                    if pad_fbank.shape[0] // 8 >= label_ctc_len: #token_num > ctc_len  ctc_len？？？
                         wav_data_lst.append(pad_fbank)  #(batch_num,wav_len,200)
                         label_data_lst.append(label)
                 pad_wav_data, input_length = self.wav_padding(wav_data_lst)  #pad_wav_data.shape = (len(wav_data_lst), wav_max_len, 200, 1)
@@ -194,7 +194,7 @@ class get_data():
                 add_len += 1
         return label_len + add_len
 
-
+'''
 # 对音频文件提取mfcc特征
 def compute_mfcc(file):
     fs, audio = wav.read(file)
@@ -202,7 +202,7 @@ def compute_mfcc(file):
     mfcc_feat = mfcc_feat[::3]
     mfcc_feat = np.transpose(mfcc_feat)
     return mfcc_feat
-
+'''
 
 # 获取信号的时频图(语谱图，语音频谱图) 横轴时间，纵轴频率，第三维用颜色表示幅值
 def compute_fbank(file):

@@ -41,7 +41,7 @@ class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向�
         self.h3 = cnn_cell(128, self.h2)
         self.h4 = cnn_cell(128, self.h3, pool=False)
         self.h5 = cnn_cell(128, self.h4, pool=False)
-        # 200 / 8 * 128 = 3200 权重数
+        # 200 / 8 * 128 = 3200 权重数 除以8因为之前有3个pooling
         self.h6 = Reshape((-1, 3200))(self.h5)#-1是占位符，这一维的长度根据其他维而定
         self.h6 = Dropout(0.2)(self.h6)
         self.h7 = dense(256)(self.h6)
@@ -69,7 +69,7 @@ class Am():#通过对 tf.keras.Model 进行子类化并定义您自己的前向�
 
         self.ctc_model.compile(loss={'ctc': lambda y_true, output: output}, optimizer=opt,metrics = ['accuracy'])#单GPU
                                                                         #编译时指明loss和优化器
-                                                                        #直接将loss设置为y_pred（因为模型的输出就是loss，所以y_pred
+                                                                        #直接将loss设置为y_pred（因为ctc模型的输出就是loss，所以y_pred
                                                                         #就是loss），无视y_true，训练的时候，y_true随便扔一个符合形状的数组进去就行了                                                                                  #
                                                                         #lambda [arg1 ,arg2,...] : expression
 

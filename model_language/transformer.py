@@ -378,7 +378,7 @@ class Lm():
 
             # Final linear projection
             self.logits = tf.layers.dense(self.outputs,  self.label_vocab_size)#logits，尚未被softmax归一化的对数概率，可作为softmax输入
-            self.preds = tf.to_int32(tf.argmax(self.logits, axis=-1))#[N,T]   tf.argmax它能给出某个tensor对象在某一维上的其数据最大值所在的索引值
+            self.preds = tf.to_int32(tf.argmax(self.logits, axis=-1))#preds[N,T]   tf.argmax它能给出某个tensor对象在某一维上的其数据最大值所在的索引值
             self.istarget = tf.to_float(tf.not_equal(self.y, 0))#not_equal返回bool类型张量，保证y不等于0
                                                                 #把label（即self.y）中所有id不为0（即是真实的word，不是pad）的位置的值用float型的1.0代替
 
